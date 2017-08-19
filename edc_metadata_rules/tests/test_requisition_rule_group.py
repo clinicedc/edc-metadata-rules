@@ -45,8 +45,8 @@ class BadPanelsRequisitionRuleGroup(RequisitionRuleGroup):
         target_panels=['blah1', 'blah2'])
 
     class Meta:
-        app_label = 'edc_metadata'
-        source_model = 'edc_metadata.crfone'
+        app_label = 'edc_metadata_rules'
+        source_model = 'edc_metadata_rules.crfone'
         requisition_model = 'subjectrequisition'
 
 
@@ -69,7 +69,7 @@ class RequisitionRuleGroup2(RequisitionRuleGroup):
         target_panels=[panel_three, panel_four])
 
     class Meta:
-        app_label = 'edc_metadata'
+        app_label = 'edc_metadata_rules'
         source_model = 'subjectrequisition'
         requisition_model = 'subjectrequisition'
 
@@ -97,7 +97,7 @@ class MyRequisitionRuleGroup(BaseRequisitionRuleGroup):
     """
 
     class Meta:
-        app_label = 'edc_metadata'
+        app_label = 'edc_metadata_rules'
         source_model = 'crfone'
         requisition_model = 'subjectrequisition'
 
@@ -142,7 +142,7 @@ class TestRequisitionRuleGroup(TestCase):
         rule_results, _ = MyRequisitionRuleGroup().evaluate_rules(visit=subject_visit)
         for panel_name in ['one', 'two']:
             with self.subTest(panel_name=panel_name):
-                key = f'edc_metadata.subjectrequisition'
+                key = f'edc_metadata_rules.subjectrequisition'
                 for rule_result in rule_results[
                         'MyRequisitionRuleGroup.male'][key]:
                     self.assertEqual(rule_result.entry_status, REQUIRED)
@@ -155,7 +155,7 @@ class TestRequisitionRuleGroup(TestCase):
         rule_results, _ = MyRequisitionRuleGroup().evaluate_rules(visit=subject_visit)
         for panel_name in ['one', 'two']:
             with self.subTest(panel_name=panel_name):
-                key = f'edc_metadata.subjectrequisition'
+                key = f'edc_metadata_rules.subjectrequisition'
                 for rule_result in rule_results[
                         'MyRequisitionRuleGroup.female'].get(key):
                     self.assertEqual(rule_result.entry_status, REQUIRED)
@@ -168,7 +168,7 @@ class TestRequisitionRuleGroup(TestCase):
             class BadRequisitionRuleGroup(BaseRequisitionRuleGroup):
 
                 class Meta:
-                    app_label = 'edc_metadata'
+                    app_label = 'edc_metadata_rules'
                     source_model = 'subjectrequisition'
                     requisition_model = 'subjectrequisition'
         except RequisitionRuleGroupMetaOptionsError:
@@ -195,7 +195,7 @@ class TestRequisitionRuleGroup(TestCase):
                     target_panels=[panel_three, panel_four])
 
                 class Meta:
-                    app_label = 'edc_metadata'
+                    app_label = 'edc_metadata_rules'
                     source_model = 'crf_one'
                     requisition_model = 'subjectrequisition'
         except RequisitionRuleGroupMetaOptionsError:
@@ -208,7 +208,7 @@ class TestRequisitionRuleGroup(TestCase):
         rule_results, _ = RequisitionRuleGroup2().evaluate_rules(visit=subject_visit)
         for panel_name in ['one', 'two']:
             with self.subTest(panel_name=panel_name):
-                key = f'edc_metadata.subjectrequisition'
+                key = f'edc_metadata_rules.subjectrequisition'
                 for rule_result in rule_results[
                         'RequisitionRuleGroup2.male'][key]:
                     self.assertEqual(rule_result.entry_status, REQUIRED)
@@ -225,7 +225,7 @@ class TestRequisitionRuleGroup(TestCase):
         for panel_name in ['one', 'two']:
             with self.subTest(panel_name=panel_name):
                 obj = RequisitionMetadata.objects.get(
-                    model='edc_metadata.subjectrequisition',
+                    model='edc_metadata_rules.subjectrequisition',
                     subject_identifier=subject_visit.subject_identifier,
                     visit_code=subject_visit.visit_code,
                     panel_name=panel_name)
@@ -240,7 +240,7 @@ class TestRequisitionRuleGroup(TestCase):
         for panel_name in ['three', 'four']:
             with self.subTest(panel_name=panel_name):
                 obj = RequisitionMetadata.objects.get(
-                    model='edc_metadata.subjectrequisition',
+                    model='edc_metadata_rules.subjectrequisition',
                     subject_identifier=subject_visit.subject_identifier,
                     visit_code=subject_visit.visit_code,
                     panel_name=panel_name)
@@ -261,7 +261,7 @@ class TestRequisitionRuleGroup(TestCase):
         for panel_name in ['three', 'four']:
             with self.subTest(panel_name=panel_name):
                 obj = RequisitionMetadata.objects.get(
-                    model='edc_metadata.subjectrequisition',
+                    model='edc_metadata_rules.subjectrequisition',
                     subject_identifier=subject_visit.subject_identifier,
                     visit_code=subject_visit.visit_code,
                     panel_name=panel_name)
@@ -276,7 +276,7 @@ class TestRequisitionRuleGroup(TestCase):
         for panel_name in ['one', 'two']:
             with self.subTest(panel_name=panel_name):
                 obj = RequisitionMetadata.objects.get(
-                    model='edc_metadata.subjectrequisition',
+                    model='edc_metadata_rules.subjectrequisition',
                     subject_identifier=subject_visit.subject_identifier,
                     visit_code=subject_visit.visit_code,
                     panel_name=panel_name)

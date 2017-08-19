@@ -14,8 +14,8 @@ from .metadata_rules import register_to_site_reference_configs
 
 class RuleGroupWithoutRules(CrfRuleGroup):
     class Meta:
-        app_label = 'edc_metadata'
-        source_model = 'edc_metadata.subjectvisit'
+        app_label = 'edc_metadata_rules'
+        source_model = 'edc_metadata_rules.subjectvisit'
 
 
 class RuleGroupWithRules(CrfRuleGroup):
@@ -26,8 +26,8 @@ class RuleGroupWithRules(CrfRuleGroup):
         target_models=['crfone', 'crftwo'])
 
     class Meta:
-        app_label = 'edc_metadata'
-        source_model = 'edc_metadata.subjectvisit'
+        app_label = 'edc_metadata_rules'
+        source_model = 'edc_metadata_rules.subjectvisit'
 
 
 class RuleGroupWithRules2(CrfRuleGroup):
@@ -38,8 +38,8 @@ class RuleGroupWithRules2(CrfRuleGroup):
         target_models=['crfone', 'crftwo'])
 
     class Meta:
-        app_label = 'edc_metadata'
-        source_model = 'edc_metadata.subjectvisit'
+        app_label = 'edc_metadata_rules'
+        source_model = 'edc_metadata_rules.subjectvisit'
 
 
 class TestSiteMetadataRules(TestCase):
@@ -61,13 +61,13 @@ class TestSiteMetadataRules(TestCase):
 
     def test_register_rule_group_get_rule_groups_for_app_label(self):
         site_metadata_rules.register(RuleGroupWithRules)
-        rule_groups = site_metadata_rules.rule_groups.get('edc_metadata')
+        rule_groups = site_metadata_rules.rule_groups.get('edc_metadata_rules')
         self.assertEqual(rule_groups, [RuleGroupWithRules])
 
     def test_register_rule_group_register_more_than_one_rule_group(self):
         site_metadata_rules.register(RuleGroupWithRules)
         site_metadata_rules.register(RuleGroupWithRules2)
-        rule_groups = site_metadata_rules.rule_groups.get('edc_metadata')
+        rule_groups = site_metadata_rules.rule_groups.get('edc_metadata_rules')
         self.assertEqual(
             rule_groups, [RuleGroupWithRules, RuleGroupWithRules2])
 
@@ -92,10 +92,10 @@ class TestSiteMetadataRules(TestCase):
                 target_models=['crfone', 'crftwo'])
 
             class Meta:
-                app_label = 'edc_metadata'
-                source_model = 'edc_metadata.subjectvisit'
+                app_label = 'edc_metadata_rules'
+                source_model = 'edc_metadata_rules.subjectvisit'
 
-        self.assertIn('edc_metadata', site_metadata_rules.registry)
+        self.assertIn('edc_metadata_rules', site_metadata_rules.registry)
 
     def test_register_decorator_raises(self):
 
@@ -103,8 +103,8 @@ class TestSiteMetadataRules(TestCase):
             @register()
             class RuleGroupWithRules:
                 class Meta:
-                    app_label = 'edc_metadata'
-                    source_model = 'edc_metadata.subjectvisit'
+                    app_label = 'edc_metadata_rules'
+                    source_model = 'edc_metadata_rules.subjectvisit'
         except RegisterRuleGroupError:
             pass
         else:

@@ -26,8 +26,12 @@ class AppConfig(DjangoAppConfig):
 
 
 if settings.APP_NAME == 'edc_metadata_rules':
+    from edc_metadata.apps import AppConfig as BaseEdcMetadataAppConfig
     from edc_visit_tracking.apps import AppConfig as BaseEdcVisitTrackingAppConfig
+
+    class EdcMetadataAppConfig(BaseEdcMetadataAppConfig):
+        reason_field = {'edc_metadata_rules.subjectvisit': 'reason'}
 
     class EdcVisitTrackingAppConfig(BaseEdcVisitTrackingAppConfig):
         visit_models = {
-            'edc_metadata': ('subject_visit', 'edc_metadata.subjectvisit')}
+            'edc_metadata_rules': ('subject_visit', 'edc_metadata.subjectvisit')}
