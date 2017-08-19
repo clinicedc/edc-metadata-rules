@@ -12,6 +12,7 @@ style = color_style()
 
 class AppConfig(DjangoAppConfig):
     name = 'edc_metadata_rules'
+    metadata_rules_enabled = True
 
     def ready(self):
         sys.stdout.write(f'Loading {self.name} ...\n')

@@ -1,9 +1,10 @@
 from collections import OrderedDict, namedtuple
 
+from edc_metadata import REQUISITION
+
 from ..rule_group_meta_options import RuleGroupMetaOptions
 from ..rule_group_metaclass import RuleGroupMetaclass
 from .requisition_metadata_updater import RequisitionMetadataUpdater
-from edc_metadata.constants import REQUISITION
 
 RuleResult = namedtuple('RuleResult', 'target_panel entry_status')
 

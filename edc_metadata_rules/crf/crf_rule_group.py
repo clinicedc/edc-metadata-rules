@@ -1,6 +1,7 @@
 from collections import OrderedDict
 
-from ...constants import CRF
+from edc_metadata import CRF
+
 from ..rule_group_metaclass import RuleGroupMetaclass
 from ..metadata_updater import MetadataUpdater
 
