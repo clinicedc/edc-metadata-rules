@@ -1,3 +1,5 @@
+from edc_reference.reference import ReferenceObjectDoesNotExist
+
 
 class PredicateError(Exception):
     pass
@@ -9,7 +11,7 @@ class NoValueError(Exception):
 
 class BasePredicate:
 
-    def get_value(self, attr=None, **kwargs):
+    def get_value(self, attr=None, source_model=None, reference_getter_cls=None, **kwargs):
         """Returns a value by checking for the attr on each arg.
 
         Each arg in args may be a model instance, queryset, or None.
@@ -19,8 +21,6 @@ class BasePredicate:
         """
         value = None
         found_on_instance = None
-        reference_getter_cls = kwargs.pop('reference_getter_cls')
-        source_model = kwargs.pop('source_model')
         for instance in kwargs.values():
             try:
                 getattr(instance, attr)
@@ -33,17 +33,22 @@ class BasePredicate:
             value = getattr(found_on_instance, attr)
         else:
             visit = kwargs.get('visit')
-            reference = reference_getter_cls(
-                field_name=attr,
-                model=source_model,
-                subject_identifier=visit.subject_identifier,
-                report_datetime=visit.report_datetime,
-                visit_code=visit.visit_code)
-            if reference.has_value:
-                value = getattr(reference, attr)
-            else:
+            try:
+                reference = reference_getter_cls(
+                    field_name=attr,
+                    model=source_model,
+                    subject_identifier=visit.subject_identifier,
+                    report_datetime=visit.report_datetime,
+                    visit_code=visit.visit_code)
+            except ReferenceObjectDoesNotExist as e:
                 raise NoValueError(
-                    f'No value found for {attr}. Given {kwargs}')
+                    f'No value found for {attr}. Given {kwargs}. Got {e}.')
+            else:
+                if reference.has_value:
+                    value = getattr(reference, attr)
+                else:
+                    raise NoValueError(
+                        f'No value found for {attr}. Given {kwargs}')
         return value
 
 

@@ -1,9 +1,9 @@
 from collections import OrderedDict
 
 from edc_metadata import CRF
+from edc_metadata.metadata_updater import MetadataUpdater
 
 from ..rule_group_metaclass import RuleGroupMetaclass
-from ..metadata_updater import MetadataUpdater
 
 
 class CrfRuleGroup(object, metaclass=RuleGroupMetaclass):

@@ -14,7 +14,7 @@ from edc_metadata.models import CrfMetadata
 from ..crf import CrfRuleGroup, CrfRule
 from ..predicate import P
 from ..site import site_metadata_rules
-from .metadata_rules import register_to_site_reference_configs
+from .reference_configs import register_to_site_reference_configs
 from .models import Appointment, SubjectVisit
 from .models import CrfOne, CrfTwo, Enrollment
 from .visit_schedule import visit_schedule

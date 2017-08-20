@@ -9,7 +9,7 @@ from ..decorators import register, RegisterRuleGroupError
 from ..predicate import P
 from ..site import SiteMetadataRulesAlreadyRegistered, SiteMetadataRulesImportError
 from ..site import site_metadata_rules, SiteMetadataNoRulesError
-from .metadata_rules import register_to_site_reference_configs
+from .reference_configs import register_to_site_reference_configs
 
 
 class RuleGroupWithoutRules(CrfRuleGroup):
@@ -113,4 +113,4 @@ class TestSiteMetadataRules(TestCase):
     def test_autodiscover(self):
         self.assertRaises(
             SiteMetadataRulesImportError,
-            site_metadata_rules.autodiscover, 'tests.metadata_rules')
+            site_metadata_rules.autodiscover, 'tests.reference_configs')
