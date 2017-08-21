@@ -71,13 +71,8 @@ class SiteMetadataRules:
                             raise
 
                 else:
-                    if not self.rule_groups.get(str(app)):
-                        raise SiteMetadataRulesImportError(
-                            f'No rule groups found to register in '
-                            f'\'{app}.{module_name}\'\n')
-                    else:
-                        sys.stdout.write(
-                            f'   - imported metadata rules from \'{app}.{module_name}\'\n')
+                    sys.stdout.write(
+                        f'   - imported metadata rules from \'{app}.{module_name}\'\n')
             except ImportError as e:
                 pass
 
