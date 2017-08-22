@@ -124,12 +124,15 @@ class TestRequisitionRuleGroup(TestCase):
         self.registered_subject = RegisteredSubject.objects.create(
             subject_identifier=subject_identifier, gender=gender)
         Enrollment.objects.create(subject_identifier=subject_identifier)
+        for appointment in Appointment.objects.all():
+            SubjectVisit.objects.create(
+                appointment=appointment, reason=SCHEDULED,
+                subject_identifier=subject_identifier)
         self.appointment = Appointment.objects.get(
             subject_identifier=subject_identifier,
             visit_code=self.schedule.visits.first.code)
-        subject_visit = SubjectVisit.objects.create(
-            appointment=self.appointment, reason=SCHEDULED,
-            subject_identifier=subject_identifier)
+        subject_visit = SubjectVisit.objects.get(
+            appointment=self.appointment)
         return subject_visit
 
     def test_rule_bad_panel_names(self):

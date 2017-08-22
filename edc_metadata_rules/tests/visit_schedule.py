@@ -34,6 +34,12 @@ requisitions = FormsCollection(
         panel='six', required=True, additional=False),
 )
 
+requisitions3000 = FormsCollection(
+    Requisition(
+        show_order=10, model='edc_metadata_rules.subjectrequisition',
+        panel='seven', required=True, additional=False),
+)
+
 visit0 = Visit(
     code='1000',
     title='Day 1',
@@ -54,6 +60,16 @@ visit1 = Visit(
     requisitions=requisitions,
     crfs=crfs)
 
+visit2 = Visit(
+    code='3000',
+    title='Day 3',
+    timepoint=2,
+    rbase=relativedelta(days=2),
+    rlower=relativedelta(days=0),
+    rupper=relativedelta(days=6),
+    requisitions=requisitions3000,
+    crfs=crfs)
+
 schedule = Schedule(
     name='schedule',
     enrollment_model=f'{app_label}.enrollment',
@@ -61,6 +77,7 @@ schedule = Schedule(
 
 schedule.add_visit(visit0)
 schedule.add_visit(visit1)
+schedule.add_visit(visit2)
 
 visit_schedule = VisitSchedule(
     name='visit_schedule',
