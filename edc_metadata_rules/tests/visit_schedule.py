@@ -13,31 +13,53 @@ crfs = FormsCollection(
     Crf(show_order=5, model=f'{app_label}.crffive', required=True),
 )
 
-requisitions = FormsCollection(
+requisitions0 = FormsCollection(
     Requisition(
         show_order=10, model=f'{app_label}.subjectrequisition',
-        panel='one', required=True, additional=False),
+        panel='one', required=False, additional=False),
     Requisition(
         show_order=20, model=f'{app_label}.subjectrequisition',
-        panel='two', required=True, additional=False),
+        panel='two', required=False, additional=False),
     Requisition(
         show_order=30, model=f'{app_label}.subjectrequisition',
-        panel='three', required=True, additional=False),
+        panel='three', required=False, additional=False),
     Requisition(
         show_order=40, model=f'{app_label}.subjectrequisition',
-        panel='four', required=True, additional=False),
+        panel='four', required=False, additional=False),
     Requisition(
         show_order=50, model=f'{app_label}.subjectrequisition',
-        panel='five', required=True, additional=False),
+        panel='five', required=False, additional=False),
     Requisition(
         show_order=60, model=f'{app_label}.subjectrequisition',
-        panel='six', required=True, additional=False),
+        panel='six', required=False, additional=False),
 )
 
-requisitions3000 = FormsCollection(
+requisitions1 = FormsCollection(
+    Requisition(
+        show_order=10, model=f'{app_label}.subjectrequisition',
+        panel='four', required=False, additional=False),
+    Requisition(
+        show_order=20, model=f'{app_label}.subjectrequisition',
+        panel='five', required=False, additional=False),
+    Requisition(
+        show_order=30, model=f'{app_label}.subjectrequisition',
+        panel='six', required=False, additional=False),
+    Requisition(
+        show_order=40, model=f'{app_label}.subjectrequisition',
+        panel='seven', required=False, additional=False),
+    Requisition(
+        show_order=50, model=f'{app_label}.subjectrequisition',
+        panel='eight', required=False, additional=False),
+    Requisition(
+        show_order=60, model=f'{app_label}.subjectrequisition',
+        panel='nine', required=False, additional=False),
+)
+
+
+requisitions2 = FormsCollection(
     Requisition(
         show_order=10, model='edc_metadata_rules.subjectrequisition',
-        panel='seven', required=True, additional=False),
+        panel='seven', required=False, additional=False),
 )
 
 visit0 = Visit(
@@ -47,7 +69,7 @@ visit0 = Visit(
     rbase=relativedelta(days=0),
     rlower=relativedelta(days=0),
     rupper=relativedelta(days=6),
-    requisitions=requisitions,
+    requisitions=requisitions0,
     crfs=crfs)
 
 visit1 = Visit(
@@ -57,7 +79,7 @@ visit1 = Visit(
     rbase=relativedelta(days=1),
     rlower=relativedelta(days=0),
     rupper=relativedelta(days=6),
-    requisitions=requisitions,
+    requisitions=requisitions1,
     crfs=crfs)
 
 visit2 = Visit(
@@ -67,7 +89,7 @@ visit2 = Visit(
     rbase=relativedelta(days=2),
     rlower=relativedelta(days=0),
     rupper=relativedelta(days=6),
-    requisitions=requisitions3000,
+    requisitions=requisitions2,
     crfs=crfs)
 
 schedule = Schedule(

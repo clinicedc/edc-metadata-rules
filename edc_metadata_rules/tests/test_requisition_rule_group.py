@@ -18,6 +18,7 @@ from ..site import site_metadata_rules
 from .reference_configs import register_to_site_reference_configs
 from .models import Appointment, SubjectVisit, Enrollment, SubjectRequisition
 from .visit_schedule import visit_schedule
+from edc_metadata_rules.tests.models import CrfOne
 
 fake = Faker()
 
@@ -33,6 +34,8 @@ panel_three = RequisitionPanel('three')
 panel_four = RequisitionPanel('four')
 panel_five = RequisitionPanel('five')
 panel_six = RequisitionPanel('six')
+panel_seven = RequisitionPanel('seven')
+panel_eight = RequisitionPanel('eight')
 
 
 class BadPanelsRequisitionRuleGroup(RequisitionRuleGroup):
@@ -72,6 +75,22 @@ class RequisitionRuleGroup2(RequisitionRuleGroup):
     class Meta:
         app_label = 'edc_metadata_rules'
         source_model = 'subjectrequisition'
+        requisition_model = 'subjectrequisition'
+
+
+class RequisitionRuleGroup3(RequisitionRuleGroup):
+    """A rule group where source model is a requisition.
+    """
+
+    female = RequisitionRule(
+        predicate=P('f1', 'eq', 'hello'),
+        consequence=REQUIRED,
+        alternative=NOT_REQUIRED,
+        target_panels=[panel_six, panel_seven, panel_eight])
+
+    class Meta:
+        app_label = 'edc_metadata_rules'
+        source_model = 'crfone'
         requisition_model = 'subjectrequisition'
 
 
@@ -278,6 +297,22 @@ class TestRequisitionRuleGroup(TestCase):
         SubjectRequisition.objects.create(
             subject_visit=subject_visit, panel_name=panel_five.name)
         for panel_name in ['one', 'two']:
+            with self.subTest(panel_name=panel_name):
+                obj = RequisitionMetadata.objects.get(
+                    model='edc_metadata_rules.subjectrequisition',
+                    subject_identifier=subject_visit.subject_identifier,
+                    visit_code=subject_visit.visit_code,
+                    panel_name=panel_name)
+                self.assertEqual(obj.entry_status, NOT_REQUIRED)
+
+    @tag('1')
+    def test_metadata_requisition(self):
+        subject_visit = self.enroll(gender=FEMALE)
+        site_metadata_rules.registry = OrderedDict()
+        site_metadata_rules.register(RequisitionRuleGroup3)
+        CrfOne.objects.create(
+            subject_visit=subject_visit, f1='hello')
+        for panel_name in ['one', 'two', 'three', 'four', 'five']:
             with self.subTest(panel_name=panel_name):
                 obj = RequisitionMetadata.objects.get(
                     model='edc_metadata_rules.subjectrequisition',
