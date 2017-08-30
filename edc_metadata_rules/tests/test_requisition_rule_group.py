@@ -7,9 +7,8 @@ from edc_reference.models import Reference
 from edc_registration.models import RegisteredSubject
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_visit_tracking.constants import SCHEDULED
-from edc_metadata import NOT_REQUIRED, REQUIRED
+from edc_metadata import NOT_REQUIRED, REQUIRED, InvalidTargetPanel
 from edc_metadata.models import RequisitionMetadata
-from edc_metadata.requisition import RequisitionMetadataError
 
 from ..predicate import P
 from ..requisition import RequisitionRuleGroupMetaOptionsError
@@ -18,7 +17,7 @@ from ..site import site_metadata_rules
 from .reference_configs import register_to_site_reference_configs
 from .models import Appointment, SubjectVisit, Enrollment, SubjectRequisition
 from .visit_schedule import visit_schedule
-from edc_metadata_rules.tests.models import CrfOne
+from .models import CrfOne
 
 fake = Faker()
 
@@ -154,10 +153,11 @@ class TestRequisitionRuleGroup(TestCase):
             appointment=self.appointment)
         return subject_visit
 
+    @tag('1')
     def test_rule_bad_panel_names(self):
         subject_visit = self.enroll(gender=MALE)
         self.assertRaises(
-            RequisitionMetadataError,
+            InvalidTargetPanel,
             BadPanelsRequisitionRuleGroup().evaluate_rules, visit=subject_visit)
 
     def test_rule_male(self):
@@ -305,7 +305,6 @@ class TestRequisitionRuleGroup(TestCase):
                     panel_name=panel_name)
                 self.assertEqual(obj.entry_status, NOT_REQUIRED)
 
-    @tag('1')
     def test_metadata_requisition(self):
         subject_visit = self.enroll(gender=FEMALE)
         site_metadata_rules.registry = OrderedDict()

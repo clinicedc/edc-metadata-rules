@@ -23,7 +23,7 @@ fake = Faker()
 edc_registration_app_config = django_apps.get_app_config('edc_registration')
 
 
-class MyCrfRuleGroup(CrfRuleGroup):
+class CrfRuleGroupOne(CrfRuleGroup):
 
     crfs_car = CrfRule(
         predicate=P('f1', 'eq', 'car'),
@@ -36,6 +36,25 @@ class MyCrfRuleGroup(CrfRuleGroup):
         consequence=REQUIRED,
         alternative=NOT_REQUIRED,
         target_models=['crfthree'])
+
+    class Meta:
+        app_label = 'edc_metadata_rules'
+        source_model = 'edc_metadata_rules.crfone'
+
+
+class CrfRuleGroupTwo(CrfRuleGroup):
+
+    crfs_truck = CrfRule(
+        predicate=P('f1', 'eq', 'truck'),
+        consequence=REQUIRED,
+        alternative=NOT_REQUIRED,
+        target_models=['crffive'])
+
+    crfs_train = CrfRule(
+        predicate=P('f1', 'eq', 'train'),
+        consequence=REQUIRED,
+        alternative=NOT_REQUIRED,
+        target_models=['crfsix'])
 
     class Meta:
         app_label = 'edc_metadata_rules'
@@ -57,7 +76,8 @@ class TestMetadataRules(TestCase):
             schedule_name='schedule')
 
         site_metadata_rules.registry = OrderedDict()
-        site_metadata_rules.register(rule_group_cls=MyCrfRuleGroup)
+        site_metadata_rules.register(rule_group_cls=CrfRuleGroupOne)
+        site_metadata_rules.register(rule_group_cls=CrfRuleGroupTwo)
 
     def enroll(self, gender=None):
         subject_identifier = fake.credit_card_number()

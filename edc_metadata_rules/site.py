@@ -14,10 +14,6 @@ class SiteMetadataNoRulesError(Exception):
     pass
 
 
-class SiteMetadataRulesImportError(Exception):
-    pass
-
-
 class SiteMetadataRules:
 
     """ Main controller of :class:`MetadataRules` objects.

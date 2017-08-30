@@ -1,7 +1,5 @@
 from collections import OrderedDict
-
-from edc_metadata import CRF
-from edc_metadata.metadata_updater import MetadataUpdater
+from edc_metadata import MetadataUpdater, TargetModelNotScheduledForVisit, CRF
 
 from ..rule_group_metaclass import RuleGroupMetaclass
 
@@ -28,8 +26,12 @@ class CrfRuleGroup(object, metaclass=RuleGroupMetaclass):
         for rule in cls._meta.options.get('rules'):
             rule_results.update({str(rule): rule.run(visit=visit)})
             for target_model, entry_status in rule_results[str(rule)].items():
-                metadata_object = metadata_updater.update(
-                    target_model=target_model,
-                    entry_status=entry_status)
-                metadata_objects.update({target_model: metadata_object})
+                try:
+                    metadata_obj = metadata_updater.update(
+                        target_model=target_model,
+                        entry_status=entry_status)
+                except TargetModelNotScheduledForVisit:
+                    pass
+                else:
+                    metadata_objects.update({target_model: metadata_obj})
         return rule_results, metadata_objects

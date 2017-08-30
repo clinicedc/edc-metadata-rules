@@ -1,7 +1,6 @@
 from collections import OrderedDict, namedtuple
-
 from edc_metadata import REQUISITION
-from edc_metadata.requisition import RequisitionMetadataUpdater
+from edc_metadata import RequisitionMetadataUpdater, TargetPanelNotScheduledForVisit
 
 from ..rule_group_meta_options import RuleGroupMetaOptions
 from ..rule_group_metaclass import RuleGroupMetaclass
@@ -74,29 +73,17 @@ class RequisitionRuleGroup(object, metaclass=RequisitionMetaclass):
             rule_results[str(rule)] = OrderedDict()
             for target_model, entry_status in rule.run(visit=visit).items():
                 rule_results[str(rule)].update({target_model: []})
-                target_panels = cls.get_target_panels(rule=rule, visit=visit)
-                for target_panel in target_panels:
-                    metadata_object = metadata_updater.update(
-                        target_model=target_model,
-                        target_panel=target_panel,
-                        entry_status=entry_status)
-                    metadata_objects.update(
-                        {target_panel: metadata_object})
-                    rule_results[str(rule)][target_model].append(
-                        RuleResult(target_panel, entry_status))
+                for target_panel in rule.target_panels:
+                    try:
+                        metadata_object = metadata_updater.update(
+                            target_model=target_model,
+                            target_panel=target_panel,
+                            entry_status=entry_status)
+                    except TargetPanelNotScheduledForVisit:
+                        pass
+                    else:
+                        metadata_objects.update(
+                            {target_panel: metadata_object})
+                        rule_results[str(rule)][target_model].append(
+                            RuleResult(target_panel, entry_status))
         return rule_results, metadata_objects
-
-    @classmethod
-    def get_target_panels(cls, rule=None, visit=None):
-        """Returns a list of target panel names -- those rule panels
-        included in this visit.
-
-        Note: rules should only attempt to update metadata for
-        the rule's target_panels also in visit.requisitions.
-        """
-        target_panels = []
-        panels_for_visit = [r.panel.name for r in visit.visit.requisitions]
-        for panel_name in rule.target_panels:
-            if panel_name in panels_for_visit:
-                target_panels.append(panel_name)
-        return target_panels
