@@ -7,7 +7,7 @@ from edc_metadata import REQUIRED, NOT_REQUIRED
 from ..crf import CrfRule, CrfRuleGroup
 from ..decorators import register, RegisterRuleGroupError
 from ..predicate import P
-from ..site import SiteMetadataRulesAlreadyRegistered, SiteMetadataRulesImportError
+from ..site import SiteMetadataRulesAlreadyRegistered
 from ..site import site_metadata_rules, SiteMetadataNoRulesError
 from .reference_configs import register_to_site_reference_configs
 
@@ -109,8 +109,3 @@ class TestSiteMetadataRules(TestCase):
             pass
         else:
             self.fail('RegisterRuleGroupError unexpectedly not raised.')
-
-    def test_autodiscover(self):
-        self.assertRaises(
-            SiteMetadataRulesImportError,
-            site_metadata_rules.autodiscover, 'tests.reference_configs')

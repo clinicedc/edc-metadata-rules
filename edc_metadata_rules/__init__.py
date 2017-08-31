@@ -10,4 +10,4 @@ from .rule_evaluator import RuleEvaluatorRegisterSubjectError, RuleEvaluatorErro
 from .rule_group_meta_options import RuleGroupMetaError
 from .rule_group_metaclass import RuleGroupError
 from .site import SiteMetadataNoRulesError, SiteMetadataRulesAlreadyRegistered
-from .site import site_metadata_rules, SiteMetadataRulesImportError
+from .site import site_metadata_rules

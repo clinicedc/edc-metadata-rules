@@ -1,7 +1,6 @@
 from collections import OrderedDict, namedtuple
-
 from edc_metadata import REQUISITION
-from edc_metadata.requisition import RequisitionMetadataUpdater
+from edc_metadata import RequisitionMetadataUpdater, TargetPanelNotScheduledForVisit
 
 from ..rule_group_meta_options import RuleGroupMetaOptions
 from ..rule_group_metaclass import RuleGroupMetaclass
@@ -64,7 +63,7 @@ class RequisitionRuleGroup(object, metaclass=RequisitionMetaclass):
     @classmethod
     def evaluate_rules(cls, visit=None):
         """Returns a tuple of (rule_results, metadata_objects) where
-        rule_results ....
+        rule_results ...
         """
         rule_results = OrderedDict()
         metadata_objects = OrderedDict()
@@ -75,11 +74,16 @@ class RequisitionRuleGroup(object, metaclass=RequisitionMetaclass):
             for target_model, entry_status in rule.run(visit=visit).items():
                 rule_results[str(rule)].update({target_model: []})
                 for target_panel in rule.target_panels:
-                    metadata_object = metadata_updater.update(
-                        target_model=target_model,
-                        target_panel=target_panel,
-                        entry_status=entry_status)
-                    metadata_objects.update({target_panel: metadata_object})
-                    rule_results[str(rule)][target_model].append(
-                        RuleResult(target_panel, entry_status))
+                    try:
+                        metadata_object = metadata_updater.update(
+                            target_model=target_model,
+                            target_panel=target_panel,
+                            entry_status=entry_status)
+                    except TargetPanelNotScheduledForVisit:
+                        pass
+                    else:
+                        metadata_objects.update(
+                            {target_panel: metadata_object})
+                        rule_results[str(rule)][target_model].append(
+                            RuleResult(target_panel, entry_status))
         return rule_results, metadata_objects
