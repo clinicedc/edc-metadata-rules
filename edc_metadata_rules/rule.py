@@ -36,7 +36,6 @@ class Rule:
         by running the rule for each target model given a visit.
         """
         result = OrderedDict()
-
         opts = {k: v for k, v in self.__dict__.items() if k.startswith != '_'}
         rule_evaluator = self.rule_evaluator_cls(
             visit=visit, logic=self._logic, **opts)

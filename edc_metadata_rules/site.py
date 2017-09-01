@@ -47,6 +47,12 @@ class SiteMetadataRules:
     def rule_groups(self):
         return self.registry
 
+    def validate(self):
+        for rule_groups in self.registry.values():
+            for rule_group in rule_groups:
+                sys.stdout.write(f'{repr(rule_group)}\n')
+                rule_group.validate()
+
     def autodiscover(self, module_name=None):
         """Autodiscovers rules in the metadata_rules.py file
         of any INSTALLED_APP.
