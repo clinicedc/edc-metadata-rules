@@ -24,6 +24,14 @@ class Rule:
         self.name = None  # set by metaclass
         self.source_model = None  # set by metaclass
         self.reference_getter_cls = None  # set by metaclass
+        self.field_names = []
+        try:
+            self.field_names = [predicate.attr]
+        except AttributeError:
+            try:
+                self.field_names = predicate.attrs
+            except AttributeError:
+                pass
 
     def __repr__(self):
         return (f'{self.__class__.__name__}(name=\'{self.name}\', group=\'{self.group}\')')

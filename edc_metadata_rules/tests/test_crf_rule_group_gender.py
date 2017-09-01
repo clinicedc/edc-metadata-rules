@@ -18,6 +18,7 @@ from ..site import site_metadata_rules
 from .reference_configs import register_to_site_reference_configs
 from .models import Appointment, SubjectVisit, Enrollment, CrfOne
 from .visit_schedule import visit_schedule
+from edc_reference.site import site_reference_configs
 
 fake = Faker()
 
@@ -107,6 +108,9 @@ class TestMetadataRulesWithGender(TestCase):
         site_visit_schedules.loaded = False
         site_visit_schedules.register(visit_schedule)
 
+        site_reference_configs.register_from_visit_schedule(
+            site_visit_schedules=site_visit_schedules)
+
         # note crfs in visit schedule are all set to REQUIRED by default.
         self.schedule = site_visit_schedules.get_schedule(
             visit_schedule_name='visit_schedule',
@@ -185,6 +189,7 @@ class TestMetadataRulesWithGender(TestCase):
                         {'edc_metadata_rules.crfthree': None,
                          'edc_metadata_rules.crftwo': None})
 
+    @tag('1')
     def test_rules_run_if_source_f1_equals_car(self):
         subject_visit = self.enroll(MALE)
         CrfOne.objects.create(subject_visit=subject_visit, f1='car')

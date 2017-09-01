@@ -34,4 +34,4 @@ if settings.APP_NAME == 'edc_metadata_rules':
 
     class EdcVisitTrackingAppConfig(BaseEdcVisitTrackingAppConfig):
         visit_models = {
-            'edc_metadata_rules': ('subject_visit', 'edc_metadata.subjectvisit')}
+            'edc_metadata_rules': ('subject_visit', 'edc_metadata_rules.subjectvisit')}

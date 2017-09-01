@@ -153,7 +153,6 @@ class TestRequisitionRuleGroup(TestCase):
             appointment=self.appointment)
         return subject_visit
 
-    @tag('1')
     def test_rule_bad_panel_names(self):
         subject_visit = self.enroll(gender=MALE)
         self.assertRaises(
