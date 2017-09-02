@@ -1,10 +1,11 @@
 from collections import OrderedDict
 from edc_metadata import MetadataUpdater, TargetModelNotScheduledForVisit, CRF
 
+from ..rule_group import RuleGroup
 from ..rule_group_metaclass import RuleGroupMetaclass
 
 
-class CrfRuleGroup(object, metaclass=RuleGroupMetaclass):
+class CrfRuleGroup(RuleGroup, metaclass=RuleGroupMetaclass):
     """A class used to declare and contain rules.
     """
 

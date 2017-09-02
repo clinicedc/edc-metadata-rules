@@ -5,6 +5,22 @@ from edc_reference import LongitudinalRefset, site_reference_configs
 
 class PredicateCollection:
 
+    """A class that groups predicates for use in rules.
+
+    For example:
+
+        pc = Predicates()
+
+        @register()
+        class MyRequisitionRuleGroup(RequisitionRuleGroup):
+
+            require_cd4 = RequisitionRule(
+                predicate=pc.func_require_cd4,
+                consequence=REQUIRED,
+                alternative=NOT_REQUIRED,
+                target_panels=[cd4_panel])
+    """
+
     app_label = 'edc_metadata'
     visit_model = None
 

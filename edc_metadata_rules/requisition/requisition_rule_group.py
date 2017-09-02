@@ -2,6 +2,7 @@ from collections import OrderedDict, namedtuple
 from edc_metadata import REQUISITION
 from edc_metadata import RequisitionMetadataUpdater, TargetPanelNotScheduledForVisit
 
+from ..rule_group import RuleGroup
 from ..rule_group_meta_options import RuleGroupMetaOptions
 from ..rule_group_metaclass import RuleGroupMetaclass
 
@@ -55,7 +56,7 @@ class RequisitionMetaclass(RuleGroupMetaclass):
     rule_group_meta = RequisitionRuleGroupMetaOptions
 
 
-class RequisitionRuleGroup(object, metaclass=RequisitionMetaclass):
+class RequisitionRuleGroup(RuleGroup, metaclass=RequisitionMetaclass):
 
     metadata_updater_cls = RequisitionMetadataUpdater
     metadata_category = REQUISITION
