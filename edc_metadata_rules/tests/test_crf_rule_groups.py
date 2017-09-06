@@ -167,7 +167,7 @@ class TestMetadataRules(TestCase):
         self.assertEqual(CrfMetadata.objects.get(
             model='edc_metadata_rules.crfthree').entry_status, REQUIRED)
 
-    def test_example7(self):
+    def test_keyed_instance_ignores_rules(self):
         """Asserts if instance exists, rule is ignored.
         """
         subject_visit = self.enroll(gender=MALE)

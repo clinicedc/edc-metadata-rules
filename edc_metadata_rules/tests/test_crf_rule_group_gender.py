@@ -189,7 +189,6 @@ class TestMetadataRulesWithGender(TestCase):
                         {'edc_metadata_rules.crfthree': None,
                          'edc_metadata_rules.crftwo': None})
 
-    @tag('1')
     def test_rules_run_if_source_f1_equals_car(self):
         subject_visit = self.enroll(MALE)
         CrfOne.objects.create(subject_visit=subject_visit, f1='car')
