@@ -33,13 +33,14 @@ class BasePredicate:
             value = getattr(found_on_instance, attr)
         else:
             visit = kwargs.get('visit')
+            opts = dict(
+                field_name=attr,
+                model=source_model,
+                subject_identifier=visit.subject_identifier,
+                report_datetime=visit.report_datetime,
+                visit_code=visit.visit_code)
             try:
-                reference = reference_getter_cls(
-                    field_name=attr,
-                    model=source_model,
-                    subject_identifier=visit.subject_identifier,
-                    report_datetime=visit.report_datetime,
-                    visit_code=visit.visit_code)
+                reference = reference_getter_cls(**opts)
             except ReferenceObjectDoesNotExist as e:
                 raise NoValueError(
                     f'No value found for {attr}. Given {kwargs}. Got {e}.')

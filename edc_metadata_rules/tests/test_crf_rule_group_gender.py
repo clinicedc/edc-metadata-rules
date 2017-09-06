@@ -1,24 +1,23 @@
 from collections import OrderedDict
 from django.test import TestCase, tag
-from faker import Faker
-
 from edc_constants.constants import MALE, FEMALE
-from edc_registration.models import RegisteredSubject
-from edc_visit_schedule.site_visit_schedules import site_visit_schedules
-from edc_visit_tracking.constants import SCHEDULED
 from edc_metadata import NOT_REQUIRED, REQUIRED
 from edc_metadata.models import CrfMetadata
 from edc_metadata.target_handler import TargetModelConflict
+from edc_reference.site import site_reference_configs
+from edc_registration.models import RegisteredSubject
+from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from edc_visit_tracking.constants import SCHEDULED
+from faker import Faker
 
 from ..crf import CrfRuleGroup, CrfRule, CrfRuleModelConflict
 from ..predicate import P, PF, PredicateError
 from ..rule_evaluator import RuleEvaluatorRegisterSubjectError
 from ..rule_group_meta_options import RuleGroupMetaError
 from ..site import site_metadata_rules
-from .reference_configs import register_to_site_reference_configs
 from .models import Appointment, SubjectVisit, Enrollment, CrfOne
+from .reference_configs import register_to_site_reference_configs
 from .visit_schedule import visit_schedule
-from edc_reference.site import site_reference_configs
 
 fake = Faker()
 
@@ -383,7 +382,7 @@ class TestMetadataRulesWithGender(TestCase):
         exists but does not meet criteria.
         """
         def func(f1, f2):
-            return True if f1 == 'f1' and f2 == 'f2' else False
+            return f1 == 'f1' and f2 == 'f2'
 
         class MyCrfRuleGroup(CrfRuleGroup):
             rule = CrfRule(
