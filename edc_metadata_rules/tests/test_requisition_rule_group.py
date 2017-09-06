@@ -320,7 +320,6 @@ class TestRequisitionRuleGroup(TestCase):
                     panel_name=panel_name)
                 self.assertEqual(obj.entry_status, NOT_REQUIRED)
 
-    @tag('1')
     def test_keyed_instance_ignores_rules(self):
         """Asserts if instance exists, rule is ignored.
         """
@@ -384,6 +383,99 @@ class TestRequisitionRuleGroup(TestCase):
 
         # change CRF value
         crf_one.f1 = 'goodbye'
+        crf_one.save()
+
+        # assert KEYED value was not changed, rule was ignored
+        metadata_obj = RequisitionMetadata.objects.get(
+            model='edc_metadata_rules.subjectrequisition',
+            subject_identifier=subject_visit.subject_identifier,
+            visit_code=subject_visit.visit_code,
+            panel_name=panel_six.name)
+        self.assertEqual(metadata_obj.entry_status, KEYED)
+
+    def test_recovers_from_sequence_problem(self):
+        """Asserts if instance exists, rule is ignored.
+        """
+        subject_visit = self.enroll(gender=FEMALE)
+        site_metadata_rules.registry = OrderedDict()
+        site_metadata_rules.register(RequisitionRuleGroup3)
+        Reference.objects.create(
+            timepoint=subject_visit.visit_code,
+            identifier=subject_visit.subject_identifier,
+            report_datetime=subject_visit.report_datetime,
+            field_name='panel_name',
+            value_str=panel_five.name)
+
+        # create CRF that triggers rule to REQUIRED
+        crf_one = CrfOne.objects.create(
+            subject_visit=subject_visit, f1='hello')
+        metadata_obj = RequisitionMetadata.objects.get(
+            model='edc_metadata_rules.subjectrequisition',
+            subject_identifier=subject_visit.subject_identifier,
+            visit_code=subject_visit.visit_code,
+            panel_name=panel_six.name)
+        self.assertEqual(metadata_obj.entry_status, REQUIRED)
+
+        # KEY requisition
+        SubjectRequisition.objects.create(
+            subject_visit=subject_visit, panel_name=panel_six.name)
+        metadata_obj = RequisitionMetadata.objects.get(
+            model='edc_metadata_rules.subjectrequisition',
+            subject_identifier=subject_visit.subject_identifier,
+            visit_code=subject_visit.visit_code,
+            panel_name=panel_six.name)
+        self.assertEqual(metadata_obj.entry_status, KEYED)
+
+        # mess up sequence
+        metadata_obj.entry_status = NOT_REQUIRED
+        metadata_obj.save()
+
+        # resave to trigger rules
+        crf_one.save()
+
+        # assert KEYED value was not changed, rule was ignored
+        metadata_obj = RequisitionMetadata.objects.get(
+            model='edc_metadata_rules.subjectrequisition',
+            subject_identifier=subject_visit.subject_identifier,
+            visit_code=subject_visit.visit_code,
+            panel_name=panel_six.name)
+        self.assertEqual(metadata_obj.entry_status, KEYED)
+
+    def test_recovers_from_missing_metadata(self):
+        subject_visit = self.enroll(gender=FEMALE)
+        site_metadata_rules.registry = OrderedDict()
+        site_metadata_rules.register(RequisitionRuleGroup3)
+        Reference.objects.create(
+            timepoint=subject_visit.visit_code,
+            identifier=subject_visit.subject_identifier,
+            report_datetime=subject_visit.report_datetime,
+            field_name='panel_name',
+            value_str=panel_five.name)
+
+        # create CRF that triggers rule to REQUIRED
+        crf_one = CrfOne.objects.create(
+            subject_visit=subject_visit, f1='hello')
+        metadata_obj = RequisitionMetadata.objects.get(
+            model='edc_metadata_rules.subjectrequisition',
+            subject_identifier=subject_visit.subject_identifier,
+            visit_code=subject_visit.visit_code,
+            panel_name=panel_six.name)
+        self.assertEqual(metadata_obj.entry_status, REQUIRED)
+
+        # KEY requisition
+        SubjectRequisition.objects.create(
+            subject_visit=subject_visit, panel_name=panel_six.name)
+        metadata_obj = RequisitionMetadata.objects.get(
+            model='edc_metadata_rules.subjectrequisition',
+            subject_identifier=subject_visit.subject_identifier,
+            visit_code=subject_visit.visit_code,
+            panel_name=panel_six.name)
+        self.assertEqual(metadata_obj.entry_status, KEYED)
+
+        # delete metadata
+        metadata_obj.delete()
+
+        # resave to trigger rules
         crf_one.save()
 
         # assert KEYED value was not changed, rule was ignored
