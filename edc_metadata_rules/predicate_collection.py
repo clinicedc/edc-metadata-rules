@@ -48,9 +48,10 @@ class PredicateCollection:
             model.split('.')[1]
         except IndexError:
             model = f'{self.app_label}.{model}'
-        refsets = LongitudinalRefset(
+        opts = dict(
             visit_model=self.visit_model,
             model=model,
             reference_model_cls=self.reference_model_cls,
             **options)
+        refsets = LongitudinalRefset(**opts)
         return refsets
