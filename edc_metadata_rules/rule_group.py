@@ -47,7 +47,7 @@ class RuleGroup:
                             f'  (?) Field {cls._meta.source_model}.{field_name} '
                             f'is invalid.\n'))
                     reference_fields = site_reference_configs.get_fields(
-                        model=cls._meta.source_model)
+                        name=cls._meta.source_model)
                     reference_fields.extend(default_fields)
                     if field_name not in reference_fields:
                         sys.stdout.write(style.ERROR(
