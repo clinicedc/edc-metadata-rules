@@ -45,15 +45,15 @@ class SubjectVisit(VisitModelMixin, CreatesMetadataModelMixin, BaseUuidModel):
     reason = models.CharField(max_length=25)
 
 
-class SubjectRequisition(CrfModelMixin, UpdatesRequisitionMetadataModelMixin,
-                         ReferenceModelMixin, BaseUuidModel):
+class SubjectRequisition(CrfModelMixin, ReferenceModelMixin, UpdatesRequisitionMetadataModelMixin,
+                         BaseUuidModel):
 
     subject_visit = models.ForeignKey(SubjectVisit)
 
     panel_name = models.CharField(max_length=25)
 
 
-class CrfOne(CrfModelMixin, UpdatesCrfMetadataModelMixin, ReferenceModelMixin, BaseUuidModel):
+class CrfOne(CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel):
 
     subject_visit = models.ForeignKey(SubjectVisit)
 
@@ -64,42 +64,42 @@ class CrfOne(CrfModelMixin, UpdatesCrfMetadataModelMixin, ReferenceModelMixin, B
     f3 = models.CharField(max_length=50, null=True)
 
 
-class CrfTwo(CrfModelMixin, UpdatesCrfMetadataModelMixin, ReferenceModelMixin, BaseUuidModel):
+class CrfTwo(CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel):
 
     subject_visit = models.ForeignKey(SubjectVisit)
 
     f1 = models.CharField(max_length=50, null=True)
 
 
-class CrfThree(CrfModelMixin, UpdatesCrfMetadataModelMixin, ReferenceModelMixin, BaseUuidModel):
+class CrfThree(CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel):
 
     subject_visit = models.ForeignKey(SubjectVisit)
 
     f1 = models.CharField(max_length=50, null=True)
 
 
-class CrfFour(CrfModelMixin, UpdatesCrfMetadataModelMixin, ReferenceModelMixin, BaseUuidModel):
+class CrfFour(CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel):
 
     subject_visit = models.ForeignKey(SubjectVisit)
 
     f1 = models.CharField(max_length=50, null=True)
 
 
-class CrfFive(CrfModelMixin, UpdatesCrfMetadataModelMixin, ReferenceModelMixin, BaseUuidModel):
+class CrfFive(CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel):
 
     subject_visit = models.ForeignKey(SubjectVisit)
 
     f1 = models.CharField(max_length=50, null=True)
 
 
-class CrfSix(CrfModelMixin, UpdatesCrfMetadataModelMixin, ReferenceModelMixin, BaseUuidModel):
+class CrfSix(CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel):
 
     subject_visit = models.ForeignKey(SubjectVisit)
 
     f1 = models.CharField(max_length=50, null=True)
 
 
-class CrfSeven(CrfModelMixin, UpdatesCrfMetadataModelMixin, ReferenceModelMixin, BaseUuidModel):
+class CrfSeven(CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel):
 
     subject_visit = models.ForeignKey(SubjectVisit)
 

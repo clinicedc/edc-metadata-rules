@@ -1,5 +1,4 @@
 from collections import OrderedDict, namedtuple
-from edc_metadata import REQUISITION
 from edc_metadata import RequisitionMetadataUpdater, TargetPanelNotScheduledForVisit
 
 from ..rule_group import RuleGroup
@@ -59,7 +58,6 @@ class RequisitionMetaclass(RuleGroupMetaclass):
 class RequisitionRuleGroup(RuleGroup, metaclass=RequisitionMetaclass):
 
     metadata_updater_cls = RequisitionMetadataUpdater
-    metadata_category = REQUISITION
 
     @classmethod
     def evaluate_rules(cls, visit=None):
@@ -68,17 +66,17 @@ class RequisitionRuleGroup(RuleGroup, metaclass=RequisitionMetaclass):
         """
         rule_results = OrderedDict()
         metadata_objects = OrderedDict()
-        metadata_updater = cls.metadata_updater_cls(
-            visit=visit, metadata_category=cls.metadata_category)
         for rule in cls._meta.options.get('rules'):
             rule_results[str(rule)] = OrderedDict()
             for target_model, entry_status in rule.run(visit=visit).items():
                 rule_results[str(rule)].update({target_model: []})
                 for target_panel in rule.target_panels:
+                    metadata_updater = cls.metadata_updater_cls(
+                        visit=visit,
+                        target_model=target_model,
+                        target_panel=target_panel)
                     try:
                         metadata_object = metadata_updater.update(
-                            target_model=target_model,
-                            target_panel=target_panel,
                             entry_status=entry_status)
                     except TargetPanelNotScheduledForVisit:
                         pass

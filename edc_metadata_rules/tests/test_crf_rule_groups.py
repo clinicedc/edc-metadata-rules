@@ -167,7 +167,7 @@ class TestMetadataRules(TestCase):
         self.assertEqual(CrfMetadata.objects.get(
             model='edc_metadata_rules.crfthree').entry_status, REQUIRED)
 
-    def test_example7(self):
+    def test_keyed_instance_ignores_rules(self):
         """Asserts if instance exists, rule is ignored.
         """
         subject_visit = self.enroll(gender=MALE)
@@ -191,6 +191,22 @@ class TestMetadataRules(TestCase):
 
         self.assertEqual(CrfMetadata.objects.get(
             model='edc_metadata_rules.crftwo').entry_status, KEYED)
+
+    @tag('2')
+    def test_recovers_from_missing_metadata(self):
+        subject_visit = self.enroll(gender=MALE)
+        metadata_obj = CrfMetadata.objects.get(
+            model='edc_metadata_rules.crftwo')
+        self.assertEqual(metadata_obj.entry_status, REQUIRED)
+
+        metadata_obj.delete()
+
+        CrfTwo.objects.create(
+            subject_visit=subject_visit)
+
+        metadata_obj = CrfMetadata.objects.get(
+            model='edc_metadata_rules.crftwo')
+        self.assertEqual(metadata_obj.entry_status, KEYED)
 
     def test_delete(self):
         """Asserts delete returns to default entry status.
