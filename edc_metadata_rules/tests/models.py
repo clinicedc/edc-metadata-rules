@@ -6,12 +6,13 @@ from edc_appointment.models import Appointment
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.utils import get_utcnow
 from edc_offstudy.model_mixins import OffstudyModelMixin
-from edc_reference.model_mixins import ReferenceModelMixin
+from edc_reference.model_mixins import ReferenceModelMixin, RequisitionReferenceModelMixin
 from edc_visit_schedule.model_mixins import EnrollmentModelMixin, DisenrollmentModelMixin
 from edc_visit_tracking.model_mixins import VisitModelMixin, CrfModelMixin
 from edc_metadata.model_mixins.creates import CreatesMetadataModelMixin
 from edc_metadata.model_mixins.updates import UpdatesCrfMetadataModelMixin
 from edc_metadata.model_mixins.updates import UpdatesRequisitionMetadataModelMixin
+from edc_constants.choices import YES_NO
 
 
 class Enrollment(EnrollmentModelMixin, CreateAppointmentsMixin, BaseUuidModel):
@@ -45,12 +46,18 @@ class SubjectVisit(VisitModelMixin, CreatesMetadataModelMixin, BaseUuidModel):
     reason = models.CharField(max_length=25)
 
 
-class SubjectRequisition(CrfModelMixin, ReferenceModelMixin, UpdatesRequisitionMetadataModelMixin,
+class SubjectRequisition(CrfModelMixin, RequisitionReferenceModelMixin, UpdatesRequisitionMetadataModelMixin,
                          BaseUuidModel):
 
     subject_visit = models.ForeignKey(SubjectVisit)
 
     panel_name = models.CharField(max_length=25)
+
+    requisition_datetime = models.DateTimeField(null=True)
+
+    is_drawn = models.CharField(max_length=25, choices=YES_NO, null=True)
+
+    reason_not_drawn = models.CharField(max_length=25, null=True)
 
 
 class CrfOne(CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel):

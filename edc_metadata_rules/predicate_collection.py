@@ -1,5 +1,4 @@
 from django.apps import apps as django_apps
-
 from edc_reference import LongitudinalRefset, site_reference_configs
 
 
@@ -33,24 +32,20 @@ class PredicateCollection:
         """
         return self.exists(value=value, field_name=field_name, **kwargs)
 
-    def exists(self, value=None, field_name=None, **kwargs):
+    def exists(self, reference_name=None, value=None, field_name=None, **kwargs):
         """Returns a list of values, all or filtered, or an empty
         list.
         """
-        refsets = self.refsets(**kwargs)
+        refsets = self.refsets(reference_name=reference_name, **kwargs)
         if value:
             return refsets.fieldset(field_name).filter(value).values
         else:
             return refsets.fieldset(field_name).all().values
 
-    def refsets(self, model=None, **options):
-        try:
-            model.split('.')[1]
-        except IndexError:
-            model = f'{self.app_label}.{model}'
+    def refsets(self, reference_name=None, **options):
         opts = dict(
+            name=reference_name,
             visit_model=self.visit_model,
-            model=model,
             reference_model_cls=self.reference_model_cls,
             **options)
         refsets = LongitudinalRefset(**opts)

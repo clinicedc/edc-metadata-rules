@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from edc_metadata import MetadataUpdater, TargetModelNotScheduledForVisit, CRF
+from edc_metadata import MetadataUpdater, TargetModelNotScheduledForVisit
 
 from ..rule_group import RuleGroup
 from ..rule_group_metaclass import RuleGroupMetaclass

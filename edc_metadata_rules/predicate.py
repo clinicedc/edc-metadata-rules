@@ -35,7 +35,7 @@ class BasePredicate:
             visit = kwargs.get('visit')
             opts = dict(
                 field_name=attr,
-                model=source_model,
+                name=source_model,
                 subject_identifier=visit.subject_identifier,
                 report_datetime=visit.report_datetime,
                 visit_code=visit.visit_code)
