@@ -81,7 +81,8 @@ visit0 = Visit(
     rlower=relativedelta(days=0),
     rupper=relativedelta(days=6),
     requisitions=requisitions0,
-    crfs=crfs0)
+    crfs=crfs0,
+    facility_name='default')
 
 visit1 = Visit(
     code='2000',
@@ -91,7 +92,8 @@ visit1 = Visit(
     rlower=relativedelta(days=0),
     rupper=relativedelta(days=6),
     requisitions=requisitions1,
-    crfs=crfs1)
+    crfs=crfs1,
+    facility_name='default')
 
 visit2 = Visit(
     code='3000',
@@ -101,7 +103,8 @@ visit2 = Visit(
     rlower=relativedelta(days=0),
     rupper=relativedelta(days=6),
     requisitions=requisitions2,
-    crfs=crfs2)
+    crfs=crfs2,
+    facility_name='default')
 
 schedule = Schedule(
     name='schedule',

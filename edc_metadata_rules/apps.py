@@ -26,6 +26,8 @@ class AppConfig(DjangoAppConfig):
 
 
 if settings.APP_NAME == 'edc_metadata_rules':
+    from dateutil.relativedelta import SU, MO, TU, WE, TH, FR, SA
+    from edc_facility.apps import AppConfig as BaseEdcFacilityAppConfig
     from edc_metadata.apps import AppConfig as BaseEdcMetadataAppConfig
     from edc_visit_tracking.apps import AppConfig as BaseEdcVisitTrackingAppConfig
 
@@ -35,3 +37,8 @@ if settings.APP_NAME == 'edc_metadata_rules':
     class EdcVisitTrackingAppConfig(BaseEdcVisitTrackingAppConfig):
         visit_models = {
             'edc_metadata_rules': ('subject_visit', 'edc_metadata_rules.subjectvisit')}
+
+    class EdcFacilityAppConfig(BaseEdcFacilityAppConfig):
+        definitions = {
+            'default': dict(days=[MO, TU, WE, TH, FR, SA, SU],
+                            slots=[100, 100, 100, 100, 100])}

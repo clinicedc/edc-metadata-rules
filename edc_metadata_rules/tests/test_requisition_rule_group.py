@@ -143,7 +143,9 @@ class TestRequisitionRuleGroup(TestCase):
         subject_identifier = fake.credit_card_number()
         self.registered_subject = RegisteredSubject.objects.create(
             subject_identifier=subject_identifier, gender=gender)
-        Enrollment.objects.create(subject_identifier=subject_identifier)
+        Enrollment.objects.create(
+            subject_identifier=subject_identifier,
+            facility_name='default')
         for appointment in Appointment.objects.all():
             SubjectVisit.objects.create(
                 appointment=appointment, reason=SCHEDULED,
