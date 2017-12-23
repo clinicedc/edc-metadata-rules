@@ -108,8 +108,10 @@ visit2 = Visit(
 
 schedule = Schedule(
     name='schedule',
-    enrollment_model=f'{app_label}.enrollment',
-    disenrollment_model=f'{app_label}.disenrollment')
+    onschedule_model=f'{app_label}.onschedule',
+    offschedule_model=f'{app_label}.offschedule',
+    consent_model=f'{app_label}.subjectconsent',
+    appointment_model='edc_appointment.appointment')
 
 schedule.add_visit(visit0)
 schedule.add_visit(visit1)
@@ -117,7 +119,7 @@ schedule.add_visit(visit2)
 
 visit_schedule = VisitSchedule(
     name='visit_schedule',
-    visit_model=f'{app_label}.subjectvisit',
-    offstudy_model=f'{app_label}.subjectoffstudy')
+    offstudy_model=f'{app_label}.subjectoffstudy',
+    death_report_model=f'{app_label}.deathreport')
 
 visit_schedule.add_schedule(schedule)

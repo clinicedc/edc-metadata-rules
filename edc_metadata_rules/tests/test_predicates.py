@@ -1,17 +1,18 @@
 from django.test import TestCase, tag
 from edc_appointment.models import Appointment
+from edc_base import get_utcnow
 from edc_constants.constants import MALE, FEMALE
 from edc_reference.reference.reference_getter import ReferenceGetter
 from edc_reference.site import site_reference_configs
-from edc_registration.models import RegisteredSubject
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
 
 from ..predicate import PF, P, NoValueError
-from .models import SubjectVisit, Enrollment, CrfOne
+from .models import SubjectVisit, SubjectConsent, CrfOne
 from .reference_configs import register_to_site_reference_configs
 from .visit_schedule import visit_schedule
+from edc_registration.models import RegisteredSubject
 
 fake = Faker()
 
@@ -27,15 +28,20 @@ class TestPredicates(TestCase):
         site_reference_configs.register_from_visit_schedule(
             site_visit_schedules=site_visit_schedules)
 
-        self.schedule = site_visit_schedules.get_schedule(
-            visit_schedule_name='visit_schedule',
-            schedule_name='schedule')
+        _, self.schedule = site_visit_schedules.get_by_onschedule_model(
+            'edc_metadata_rules.onschedule')
 
     def enroll(self, gender=None):
         subject_identifier = fake.credit_card_number()
-        self.registered_subject = RegisteredSubject.objects.create(
-            subject_identifier=subject_identifier, gender=gender)
-        Enrollment.objects.create(subject_identifier=subject_identifier)
+        subject_consent = SubjectConsent.objects.create(
+            subject_identifier=subject_identifier,
+            consent_datetime=get_utcnow(),
+            gender=gender)
+        self.registered_subject = RegisteredSubject.objects.get(
+            subject_identifier=subject_identifier)
+        self.schedule.put_on_schedule(
+            subject_identifier=subject_identifier,
+            onschedule_datetime=subject_consent.consent_datetime)
         self.appointment = Appointment.objects.get(
             subject_identifier=subject_identifier,
             visit_code=self.schedule.visits.first.code)
