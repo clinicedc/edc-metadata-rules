@@ -2,6 +2,7 @@ from collections import OrderedDict
 from django.test import TestCase, tag
 from edc_base import get_utcnow
 from edc_constants.constants import MALE, FEMALE
+from edc_facility.import_holidays import import_holidays
 from edc_metadata import NOT_REQUIRED, REQUIRED
 from edc_metadata.models import CrfMetadata
 from edc_metadata.target_handler import TargetModelConflict
@@ -103,13 +104,15 @@ class TestMetadataRulesWithGender(TestCase):
 
     def setUp(self):
 
+        import_holidays()
         register_to_site_reference_configs()
         site_visit_schedules._registry = {}
         site_visit_schedules.loaded = False
         site_visit_schedules.register(visit_schedule)
 
         site_reference_configs.register_from_visit_schedule(
-            site_visit_schedules=site_visit_schedules)
+            visit_models={
+                'edc_appointment.appointment': 'edc_metadata_rules.subjectvisit'})
 
         # note crfs in visit schedule are all set to REQUIRED by default.
         _, self.schedule = site_visit_schedules.get_by_onschedule_model(

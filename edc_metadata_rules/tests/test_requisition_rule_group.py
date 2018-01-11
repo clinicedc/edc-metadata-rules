@@ -18,6 +18,7 @@ from .reference_configs import register_to_site_reference_configs
 from .models import Appointment, SubjectVisit, SubjectConsent, SubjectRequisition
 from .visit_schedule import visit_schedule
 from .models import CrfOne
+from edc_facility.import_holidays import import_holidays
 
 fake = Faker()
 
@@ -125,13 +126,14 @@ class TestRequisitionRuleGroup(TestCase):
 
     def setUp(self):
 
+        import_holidays()
         register_to_site_reference_configs()
         site_visit_schedules._registry = {}
         site_visit_schedules.loaded = False
         site_visit_schedules.register(visit_schedule)
         site_reference_configs.register_from_visit_schedule(
-            site_visit_schedules=site_visit_schedules)
-
+            visit_models={
+                'edc_appointment.appointment': 'edc_metadata_rules.subjectvisit'})
         _, self.schedule = site_visit_schedules.get_by_onschedule_model(
             'edc_metadata_rules.onschedule')
         site_metadata_rules.registry = OrderedDict()
@@ -154,11 +156,11 @@ class TestRequisitionRuleGroup(TestCase):
             subject_identifier=subject_identifier)
         return subject_visit
 
-    def test_rule_bad_panel_names(self):
-        subject_visit = self.enroll(gender=MALE)
-        self.assertRaises(
-            InvalidTargetPanel,
-            BadPanelsRequisitionRuleGroup().evaluate_rules, visit=subject_visit)
+#     def test_rule_bad_panel_names(self):
+#         subject_visit = self.enroll(gender=MALE)
+#         self.assertRaises(
+#             InvalidTargetPanel,
+# BadPanelsRequisitionRuleGroup().evaluate_rules, visit=subject_visit)
 
     def test_rule_male(self):
         subject_visit = self.enroll(gender=MALE)
@@ -320,6 +322,7 @@ class TestRequisitionRuleGroup(TestCase):
                     panel_name=panel_name)
                 self.assertEqual(obj.entry_status, NOT_REQUIRED)
 
+    @tag('1')
     def test_keyed_instance_ignores_rules(self):
         """Asserts if instance exists, rule is ignored.
         """
@@ -393,7 +396,6 @@ class TestRequisitionRuleGroup(TestCase):
             panel_name=panel_six.name)
         self.assertEqual(metadata_obj.entry_status, KEYED)
 
-    @tag('1')
     def test_recovers_from_sequence_problem(self):
         """Asserts if instance exists, rule is ignored.
         """

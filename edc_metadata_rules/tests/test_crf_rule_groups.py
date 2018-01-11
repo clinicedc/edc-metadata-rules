@@ -19,6 +19,7 @@ from .models import Appointment, SubjectVisit
 from .models import CrfOne, CrfTwo, SubjectConsent
 from .visit_schedule import visit_schedule
 from edc_reference.site import site_reference_configs
+from edc_facility.import_holidays import import_holidays
 
 fake = Faker()
 edc_registration_app_config = django_apps.get_app_config('edc_registration')
@@ -66,12 +67,14 @@ class TestMetadataRules(TestCase):
 
     def setUp(self):
 
+        import_holidays()
         register_to_site_reference_configs()
         site_visit_schedules._registry = {}
         site_visit_schedules.loaded = False
         site_visit_schedules.register(visit_schedule)
         site_reference_configs.register_from_visit_schedule(
-            site_visit_schedules=site_visit_schedules)
+            visit_models={
+                'edc_appointment.appointment': 'edc_metadata_rules.subjectvisit'})
 
         # note crfs in visit schedule are all set to REQUIRED by default.
         _, self.schedule = site_visit_schedules.get_by_onschedule_model(

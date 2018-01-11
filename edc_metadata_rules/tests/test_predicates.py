@@ -13,6 +13,7 @@ from .models import SubjectVisit, SubjectConsent, CrfOne
 from .reference_configs import register_to_site_reference_configs
 from .visit_schedule import visit_schedule
 from edc_registration.models import RegisteredSubject
+from edc_facility.import_holidays import import_holidays
 
 fake = Faker()
 
@@ -20,14 +21,14 @@ fake = Faker()
 class TestPredicates(TestCase):
 
     def setUp(self):
+        import_holidays()
         site_visit_schedules._registry = {}
         site_visit_schedules.loaded = False
         site_visit_schedules.register(visit_schedule)
-
         register_to_site_reference_configs()
         site_reference_configs.register_from_visit_schedule(
-            site_visit_schedules=site_visit_schedules)
-
+            visit_models={
+                'edc_appointment.appointment': 'edc_metadata_rules.subjectvisit'})
         _, self.schedule = site_visit_schedules.get_by_onschedule_model(
             'edc_metadata_rules.onschedule')
 
