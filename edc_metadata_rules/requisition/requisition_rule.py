@@ -21,12 +21,6 @@ class RequisitionRule(Rule):
 
     def __init__(self, source_panel=None, target_panels=None, **kwargs):
         self.metadata_category = REQUISITION
-        try:
-            self.target_panels = [p.name for p in target_panels]
-        except AttributeError:
-            self.target_panels = target_panels
-        try:
-            self.source_panel = source_panel.name
-        except AttributeError:
-            self.source_panel = source_panel
+        self.target_panels = [p for p in target_panels]
+        self.source_panel = source_panel
         super().__init__(**kwargs)

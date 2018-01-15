@@ -17,6 +17,7 @@ from edc_visit_tracking.model_mixins import VisitModelMixin, CrfModelMixin
 from edc_metadata.model_mixins.creates import CreatesMetadataModelMixin
 from edc_metadata.model_mixins.updates import UpdatesCrfMetadataModelMixin
 from edc_metadata.model_mixins.updates import UpdatesRequisitionMetadataModelMixin
+from edc_lab.models.model_mixins.panel_model_mixin import PanelModelMixin
 
 
 class OnSchedule(OnScheduleModelMixin, BaseUuidModel):
@@ -76,12 +77,11 @@ class SubjectVisit(VisitModelMixin, ReferenceModelMixin,
 
 
 class SubjectRequisition(CrfModelMixin, RequisitionReferenceModelMixin,
+                         PanelModelMixin,
                          UpdatesRequisitionMetadataModelMixin,
                          BaseUuidModel):
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)
-
-    panel_name = models.CharField(max_length=25)
 
     requisition_datetime = models.DateTimeField(null=True)
 

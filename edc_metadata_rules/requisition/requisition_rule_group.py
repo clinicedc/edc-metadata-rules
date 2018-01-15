@@ -1,11 +1,9 @@
 from collections import OrderedDict, namedtuple
-from edc_metadata import RequisitionMetadataUpdater, TargetPanelNotScheduledForVisit
+from edc_metadata import RequisitionMetadataUpdater
 
 from ..rule_group import RuleGroup
 from ..rule_group_meta_options import RuleGroupMetaOptions
 from ..rule_group_metaclass import RuleGroupMetaclass
-from pprint import pprint
-from edc_metadata.requisition.requisition_target_handler import InvalidTargetPanel
 
 RuleResult = namedtuple('RuleResult', 'target_panel entry_status')
 
@@ -90,7 +88,7 @@ class RequisitionRuleGroup(RuleGroup, metaclass=RequisitionMetaclass):
                 for target_panel in rule.target_panels:
                     # only do something if target_panel is in
                     # visit.requisitions
-                    if target_panel in [r.panel.name for r in cls.requisitions_for_visit(visit)]:
+                    if target_panel in [r.panel for r in cls.requisitions_for_visit(visit)]:
                         metadata_updater = cls.metadata_updater_cls(
                             visit=visit,
                             target_model=target_model,
