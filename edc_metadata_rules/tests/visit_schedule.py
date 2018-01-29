@@ -1,7 +1,15 @@
 from dateutil.relativedelta import relativedelta
 
 from edc_visit_schedule import VisitSchedule, Schedule, Visit
-from edc_visit_schedule import FormsCollection, Crf, Requisition
+from edc_visit_schedule import FormsCollection, Crf, Requisition, Panel as BasePanel
+
+
+class Panel(BasePanel):
+    def __init__(self, name):
+        super().__init__(
+            requisition_model='edc_metadata_rules.subjectrequisition',
+            name=name)
+
 
 app_label = 'edc_metadata_rules'
 
@@ -26,51 +34,51 @@ crfs2 = FormsCollection(
 
 requisitions0 = FormsCollection(
     Requisition(
-        show_order=10, model=f'{app_label}.subjectrequisition',
-        panel='one', required=False, additional=False),
+        show_order=10,
+        panel=Panel('one'), required=False, additional=False),
     Requisition(
-        show_order=20, model=f'{app_label}.subjectrequisition',
-        panel='two', required=False, additional=False),
+        show_order=20,
+        panel=Panel('two'), required=False, additional=False),
     Requisition(
-        show_order=30, model=f'{app_label}.subjectrequisition',
-        panel='three', required=False, additional=False),
+        show_order=30,
+        panel=Panel('three'), required=False, additional=False),
     Requisition(
-        show_order=40, model=f'{app_label}.subjectrequisition',
-        panel='four', required=False, additional=False),
+        show_order=40,
+        panel=Panel('four'), required=False, additional=False),
     Requisition(
-        show_order=50, model=f'{app_label}.subjectrequisition',
-        panel='five', required=False, additional=False),
+        show_order=50,
+        panel=Panel('five'), required=False, additional=False),
     Requisition(
-        show_order=60, model=f'{app_label}.subjectrequisition',
-        panel='six', required=False, additional=False),
+        show_order=60,
+        panel=Panel('six'), required=False, additional=False),
 )
 
 requisitions1 = FormsCollection(
     Requisition(
-        show_order=10, model=f'{app_label}.subjectrequisition',
-        panel='four', required=False, additional=False),
+        show_order=10,
+        panel=Panel('four'), required=False, additional=False),
     Requisition(
-        show_order=20, model=f'{app_label}.subjectrequisition',
-        panel='five', required=False, additional=False),
+        show_order=20,
+        panel=Panel('five'), required=False, additional=False),
     Requisition(
-        show_order=30, model=f'{app_label}.subjectrequisition',
-        panel='six', required=False, additional=False),
+        show_order=30,
+        panel=Panel('six'), required=False, additional=False),
     Requisition(
-        show_order=40, model=f'{app_label}.subjectrequisition',
-        panel='seven', required=False, additional=False),
+        show_order=40,
+        panel=Panel('seven'), required=False, additional=False),
     Requisition(
-        show_order=50, model=f'{app_label}.subjectrequisition',
-        panel='eight', required=False, additional=False),
+        show_order=50,
+        panel=Panel('eight'), required=False, additional=False),
     Requisition(
-        show_order=60, model=f'{app_label}.subjectrequisition',
-        panel='nine', required=False, additional=False),
+        show_order=60,
+        panel=Panel('nine'), required=False, additional=False),
 )
 
 
 requisitions2 = FormsCollection(
     Requisition(
-        show_order=10, model='edc_metadata_rules.subjectrequisition',
-        panel='seven', required=False, additional=False),
+        show_order=10,
+        panel=Panel('seven'), required=False, additional=False),
 )
 
 visit0 = Visit(
@@ -81,7 +89,8 @@ visit0 = Visit(
     rlower=relativedelta(days=0),
     rupper=relativedelta(days=6),
     requisitions=requisitions0,
-    crfs=crfs0)
+    crfs=crfs0,
+    facility_name='default')
 
 visit1 = Visit(
     code='2000',
@@ -91,7 +100,8 @@ visit1 = Visit(
     rlower=relativedelta(days=0),
     rupper=relativedelta(days=6),
     requisitions=requisitions1,
-    crfs=crfs1)
+    crfs=crfs1,
+    facility_name='default')
 
 visit2 = Visit(
     code='3000',
@@ -101,12 +111,15 @@ visit2 = Visit(
     rlower=relativedelta(days=0),
     rupper=relativedelta(days=6),
     requisitions=requisitions2,
-    crfs=crfs2)
+    crfs=crfs2,
+    facility_name='default')
 
 schedule = Schedule(
     name='schedule',
-    enrollment_model=f'{app_label}.enrollment',
-    disenrollment_model=f'{app_label}.disenrollment')
+    onschedule_model=f'{app_label}.onschedule',
+    offschedule_model=f'{app_label}.offschedule',
+    consent_model=f'{app_label}.subjectconsent',
+    appointment_model='edc_appointment.appointment')
 
 schedule.add_visit(visit0)
 schedule.add_visit(visit1)
@@ -114,7 +127,7 @@ schedule.add_visit(visit2)
 
 visit_schedule = VisitSchedule(
     name='visit_schedule',
-    visit_model=f'{app_label}.subjectvisit',
-    offstudy_model=f'{app_label}.subjectoffstudy')
+    offstudy_model=f'{app_label}.subjectoffstudy',
+    death_report_model=f'{app_label}.deathreport')
 
 visit_schedule.add_schedule(schedule)

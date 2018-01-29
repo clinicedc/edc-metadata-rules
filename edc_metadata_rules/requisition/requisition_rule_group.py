@@ -1,5 +1,5 @@
 from collections import OrderedDict, namedtuple
-from edc_metadata import RequisitionMetadataUpdater, TargetPanelNotScheduledForVisit
+from edc_metadata import RequisitionMetadataUpdater
 
 from ..rule_group import RuleGroup
 from ..rule_group_meta_options import RuleGroupMetaOptions
@@ -60,9 +60,24 @@ class RequisitionRuleGroup(RuleGroup, metaclass=RequisitionMetaclass):
     metadata_updater_cls = RequisitionMetadataUpdater
 
     @classmethod
+    def requisitions_for_visit(cls, visit=None):
+        """Returns a list of scheduled or unscheduled
+        Requisitions depending on visit_code_sequence.
+        """
+        if visit.visit_code_sequence != 0:
+            requisitions = (
+                visit.visit.requisitions_unscheduled
+                + visit.visit.requisitions_prn)
+        else:
+            requisitions = visit.visit.requisitions + visit.visit.requisitions_prn
+        return requisitions
+
+    @classmethod
     def evaluate_rules(cls, visit=None):
         """Returns a tuple of (rule_results, metadata_objects) where
         rule_results ...
+
+        Metadata must exist.
         """
         rule_results = OrderedDict()
         metadata_objects = OrderedDict()
@@ -71,18 +86,16 @@ class RequisitionRuleGroup(RuleGroup, metaclass=RequisitionMetaclass):
             for target_model, entry_status in rule.run(visit=visit).items():
                 rule_results[str(rule)].update({target_model: []})
                 for target_panel in rule.target_panels:
-                    metadata_updater = cls.metadata_updater_cls(
-                        visit=visit,
-                        target_model=target_model,
-                        target_panel=target_panel)
-                    try:
-                        metadata_object = metadata_updater.update(
+                    # only do something if target_panel is in
+                    # visit.requisitions
+                    if target_panel in [r.panel for r in cls.requisitions_for_visit(visit)]:
+                        metadata_updater = cls.metadata_updater_cls(
+                            visit=visit,
+                            target_model=target_model,
+                            target_panel=target_panel)
+                        metadata_obj = metadata_updater.update(
                             entry_status=entry_status)
-                    except TargetPanelNotScheduledForVisit:
-                        pass
-                    else:
-                        metadata_objects.update(
-                            {target_panel: metadata_object})
+                        metadata_objects.update({target_panel: metadata_obj})
                         rule_results[str(rule)][target_model].append(
                             RuleResult(target_panel, entry_status))
         return rule_results, metadata_objects

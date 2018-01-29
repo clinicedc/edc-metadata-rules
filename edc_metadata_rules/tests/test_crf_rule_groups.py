@@ -3,8 +3,8 @@ from faker import Faker
 from django.apps import apps as django_apps
 from django.test import TestCase, tag
 
+from edc_base import get_utcnow
 from edc_constants.constants import MALE
-from edc_registration.models import RegisteredSubject
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_visit_tracking.constants import SCHEDULED
 
@@ -16,9 +16,10 @@ from ..predicate import P
 from ..site import site_metadata_rules
 from .reference_configs import register_to_site_reference_configs
 from .models import Appointment, SubjectVisit
-from .models import CrfOne, CrfTwo, Enrollment
+from .models import CrfOne, CrfTwo, SubjectConsent
 from .visit_schedule import visit_schedule
 from edc_reference.site import site_reference_configs
+from edc_facility.import_holidays import import_holidays
 
 fake = Faker()
 edc_registration_app_config = django_apps.get_app_config('edc_registration')
@@ -66,17 +67,18 @@ class TestMetadataRules(TestCase):
 
     def setUp(self):
 
+        import_holidays()
         register_to_site_reference_configs()
         site_visit_schedules._registry = {}
         site_visit_schedules.loaded = False
         site_visit_schedules.register(visit_schedule)
         site_reference_configs.register_from_visit_schedule(
-            site_visit_schedules=site_visit_schedules)
+            visit_models={
+                'edc_appointment.appointment': 'edc_metadata_rules.subjectvisit'})
 
         # note crfs in visit schedule are all set to REQUIRED by default.
-        self.schedule = site_visit_schedules.get_schedule(
-            visit_schedule_name='visit_schedule',
-            schedule_name='schedule')
+        _, self.schedule = site_visit_schedules.get_by_onschedule_model(
+            'edc_metadata_rules.onschedule')
 
         site_metadata_rules.registry = OrderedDict()
         site_metadata_rules.register(rule_group_cls=CrfRuleGroupOne)
@@ -84,9 +86,13 @@ class TestMetadataRules(TestCase):
 
     def enroll(self, gender=None):
         subject_identifier = fake.credit_card_number()
-        self.registered_subject = RegisteredSubject.objects.create(
-            subject_identifier=subject_identifier, gender=gender)
-        Enrollment.objects.create(subject_identifier=subject_identifier)
+        subject_consent = SubjectConsent.objects.create(
+            subject_identifier=subject_identifier,
+            consent_datetime=get_utcnow(),
+            gender=gender)
+        self.schedule.put_on_schedule(
+            subject_identifier=subject_identifier,
+            onschedule_datetime=subject_consent.consent_datetime)
         self.appointment = Appointment.objects.get(
             subject_identifier=subject_identifier,
             visit_code=self.schedule.visits.first.code)

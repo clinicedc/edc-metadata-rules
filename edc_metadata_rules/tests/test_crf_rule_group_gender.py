@@ -1,6 +1,8 @@
 from collections import OrderedDict
 from django.test import TestCase, tag
+from edc_base import get_utcnow
 from edc_constants.constants import MALE, FEMALE
+from edc_facility.import_holidays import import_holidays
 from edc_metadata import NOT_REQUIRED, REQUIRED
 from edc_metadata.models import CrfMetadata
 from edc_metadata.target_handler import TargetModelConflict
@@ -15,7 +17,7 @@ from ..predicate import P, PF, PredicateError
 from ..rule_evaluator import RuleEvaluatorRegisterSubjectError
 from ..rule_group_meta_options import RuleGroupMetaError
 from ..site import site_metadata_rules
-from .models import Appointment, SubjectVisit, Enrollment, CrfOne
+from .models import Appointment, SubjectVisit, SubjectConsent, CrfOne
 from .reference_configs import register_to_site_reference_configs
 from .visit_schedule import visit_schedule
 
@@ -102,27 +104,32 @@ class TestMetadataRulesWithGender(TestCase):
 
     def setUp(self):
 
+        import_holidays()
         register_to_site_reference_configs()
         site_visit_schedules._registry = {}
         site_visit_schedules.loaded = False
         site_visit_schedules.register(visit_schedule)
 
         site_reference_configs.register_from_visit_schedule(
-            site_visit_schedules=site_visit_schedules)
+            visit_models={
+                'edc_appointment.appointment': 'edc_metadata_rules.subjectvisit'})
 
         # note crfs in visit schedule are all set to REQUIRED by default.
-        self.schedule = site_visit_schedules.get_schedule(
-            visit_schedule_name='visit_schedule',
-            schedule_name='schedule')
+        _, self.schedule = site_visit_schedules.get_by_onschedule_model(
+            'edc_metadata_rules.onschedule')
 
         site_metadata_rules.registry = OrderedDict()
         site_metadata_rules.register(rule_group_cls=CrfRuleGroupGender)
 
     def enroll(self, gender=None):
         subject_identifier = fake.credit_card_number()
-        self.registered_subject = RegisteredSubject.objects.create(
-            subject_identifier=subject_identifier, gender=gender)
-        Enrollment.objects.create(subject_identifier=subject_identifier)
+        subject_consent = SubjectConsent.objects.create(
+            subject_identifier=subject_identifier,
+            consent_datetime=get_utcnow(),
+            gender=gender)
+        self.schedule.put_on_schedule(
+            subject_identifier=subject_identifier,
+            onschedule_datetime=subject_consent.consent_datetime)
         self.appointment = Appointment.objects.get(
             subject_identifier=subject_identifier,
             visit_code=self.schedule.visits.first.code)
