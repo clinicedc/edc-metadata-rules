@@ -22,6 +22,10 @@ class Command(BaseCommand):
             'model').annotate(model_count=Count('model')).order_by()
         crf_models = [grp.get('model') for grp in grouping]
 
+        self.validate_requisitions(requisition_models)
+        self.validate_crfs(crf_models)
+
+    def validate_requisitions(self, requisition_models):
         for model in tqdm(requisition_models):
             model_cls = django_apps.get_model(model)
             exists = 0
@@ -50,10 +54,14 @@ class Command(BaseCommand):
                         keyed += 1
                 perc = round((index / count) * 100)
                 sys.stdout.write(
-                    f' ( ) {model} exists={exists}/{count}, keyed={keyed}/{count}, missing={doesnotexist}/{count}    {perc}% \r')
+                    f' ( ) {model} exists={exists}/{count}, '
+                    f'keyed={keyed}/{count}, missing={doesnotexist}/{count}'
+                    f'    {perc}% \r')
             sys.stdout.write(
-                f' (*) {model} exists={exists}/{count}, keyed={keyed}/{count}, missing={doesnotexist}/{count}    {perc}% \n')
+                f' (*) {model} exists={exists}/{count}, keyed={keyed}/{count}, '
+                f'missing={doesnotexist}/{count}    {perc}% \n')
 
+    def validate_crfs(self, crf_models):
         for model in tqdm(crf_models):
             model_cls = django_apps.get_model(model)
             exists = 0
@@ -81,6 +89,8 @@ class Command(BaseCommand):
                         keyed += 1
                 perc = round((index / count) * 100)
                 sys.stdout.write(
-                    f' ( ) {model} exists={exists}/{count}, keyed={keyed}/{count}, missing={doesnotexist}/{count}    {perc}% \r')
+                    f' ( ) {model} exists={exists}/{count}, keyed={keyed}/{count}, '
+                    f'missing={doesnotexist}/{count}    {perc}% \r')
             sys.stdout.write(
-                f' (*) {model} exists={exists}/{count}, keyed={keyed}/{count}, missing={doesnotexist}/{count}    {perc}% \n')
+                f' (*) {model} exists={exists}/{count}, keyed={keyed}/{count}, '
+                f'missing={doesnotexist}/{count}    {perc}% \n')

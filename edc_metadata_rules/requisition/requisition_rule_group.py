@@ -91,7 +91,8 @@ class RequisitionRuleGroup(RuleGroup, metaclass=RequisitionMetaclass):
                 for target_panel in rule.target_panels:
                     # only do something if target_panel is in
                     # visit.requisitions
-                    if target_panel.name in [r.panel.name for r in cls.requisitions_for_visit(visit)]:
+                    if target_panel.name in [
+                            r.panel.name for r in cls.requisitions_for_visit(visit)]:
                         metadata_updater = cls.metadata_updater_cls(
                             visit=visit,
                             target_model=target_model,
