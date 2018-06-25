@@ -8,16 +8,15 @@ from edc_constants.choices import YES_NO
 from edc_constants.constants import MALE
 from edc_identifier.managers import SubjectIdentifierManager
 from edc_identifier.model_mixins import UniqueSubjectIdentifierFieldMixin
+from edc_lab.models.model_mixins.panel_model_mixin import PanelModelMixin
+from edc_metadata.model_mixins.creates import CreatesMetadataModelMixin
+from edc_metadata.model_mixins.updates import UpdatesCrfMetadataModelMixin
+from edc_metadata.model_mixins.updates import UpdatesRequisitionMetadataModelMixin
 from edc_offstudy.model_mixins import OffstudyModelMixin
 from edc_reference.model_mixins import ReferenceModelMixin, RequisitionReferenceModelMixin
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 from edc_visit_schedule.model_mixins import OnScheduleModelMixin, OffScheduleModelMixin
 from edc_visit_tracking.model_mixins import VisitModelMixin, CrfModelMixin
-
-from edc_metadata.model_mixins.creates import CreatesMetadataModelMixin
-from edc_metadata.model_mixins.updates import UpdatesCrfMetadataModelMixin
-from edc_metadata.model_mixins.updates import UpdatesRequisitionMetadataModelMixin
-from edc_lab.models.model_mixins.panel_model_mixin import PanelModelMixin
 
 
 class OnSchedule(OnScheduleModelMixin, BaseUuidModel):

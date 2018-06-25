@@ -4,7 +4,7 @@ Create rules to manipulate metadata (edc-metadata)
 
 # edc_metadata
 
-[![Build Status](https://travis-ci.org/botswana-harvard/edc-metadata.svg?branch=develop)](https://travis-ci.org/botswana-harvard/edc-metadata) [![Coverage Status](https://coveralls.io/repos/github/botswana-harvard/edc-metadata/badge.svg?branch=develop)](https://coveralls.io/github/botswana-harvard/edc-metadata?branch=develop)
+[![Build Status](https://travis-ci.org/clinicedc/edc-metadata.svg?branch=develop)](https://travis-ci.org/clinicedc/edc-metadata) [![Coverage Status](https://coveralls.io/repos/github/clinicedc/edc-metadata/badge.svg?branch=develop)](https://coveralls.io/github/clinicedc/edc-metadata?branch=develop)
 
 
 See also `edc_metadata`

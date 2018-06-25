@@ -1,4 +1,5 @@
 from collections import OrderedDict, namedtuple
+from django.core.exceptions import ValidationError
 from edc_metadata import RequisitionMetadataUpdater
 
 from ..rule_group import RuleGroup
@@ -8,7 +9,7 @@ from ..rule_group_metaclass import RuleGroupMetaclass
 RuleResult = namedtuple('RuleResult', 'target_panel entry_status')
 
 
-class RequisitionRuleGroupMetaOptionsError(Exception):
+class RequisitionRuleGroupMetaOptionsError(ValidationError):
     pass
 
 
@@ -33,7 +34,8 @@ class RequisitionRuleGroupMetaOptions(RuleGroupMetaOptions):
                             f'Rule expects "source_panel". Got '
                             f'requisition_model="{self.requisition_model}", '
                             f'source_model="{self.source_model}". '
-                            f'See {group_name}.{name}.')
+                            f'See {group_name}.{name}.',
+                            code='source_panel_expected')
             else:
                 for name, rule in rules.items():
                     if rule.source_panel:
@@ -41,7 +43,8 @@ class RequisitionRuleGroupMetaOptions(RuleGroupMetaOptions):
                             f'Rule does not expect "source_panel". Got '
                             f'requisition_model="{self.requisition_model}", '
                             f'source_model="{self.source_model}". '
-                            f'See {group_name}.{name}.')
+                            f'See {group_name}.{name}.',
+                            code='source_panel_not_expected')
 
     @property
     def default_meta_options(self):
@@ -88,7 +91,7 @@ class RequisitionRuleGroup(RuleGroup, metaclass=RequisitionMetaclass):
                 for target_panel in rule.target_panels:
                     # only do something if target_panel is in
                     # visit.requisitions
-                    if target_panel in [r.panel for r in cls.requisitions_for_visit(visit)]:
+                    if target_panel.name in [r.panel.name for r in cls.requisitions_for_visit(visit)]:
                         metadata_updater = cls.metadata_updater_cls(
                             visit=visit,
                             target_model=target_model,
