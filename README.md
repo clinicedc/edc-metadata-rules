@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/clinicedc/edc-metadata.svg?branch=develop)](https://travis-ci.com/clinicedc/edc-metadata) [![Coverage Status](https://coveralls.io/repos/github/clinicedc/edc-metadata/badge.svg?branch=develop)](https://coveralls.io/github/clinicedc/edc-metadata?branch=develop)
+[![Build Status](https://travis-ci.com/clinicedc/edc-metadata-rules.svg?branch=develop)](https://travis-ci.com/clinicedc/edc-metadata-rules) [![Coverage Status](https://coveralls.io/repos/github/clinicedc/edc-metadata-rules/badge.svg?branch=develop)](https://coveralls.io/github/clinicedc/edc-metadata-rules?branch=develop)
 
 # edc-metadata-rules
 Create rules to manipulate metadata (edc-metadata)
