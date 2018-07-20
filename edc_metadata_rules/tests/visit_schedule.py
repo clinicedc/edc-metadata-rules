@@ -1,17 +1,23 @@
 from dateutil.relativedelta import relativedelta
 
 from edc_visit_schedule import VisitSchedule, Schedule, Visit
-from edc_visit_schedule import FormsCollection, Crf, Requisition, Panel as BasePanel
+from edc_visit_schedule import FormsCollection, Crf, Requisition
+from edc_visit_schedule.tests import DummyPanel
 
 
-class Panel(BasePanel):
+app_label = 'edc_metadata_rules'
+
+
+class MockPanel(DummyPanel):
+    """`requisition_model` is normally set when the lab profile
+    is set up.
+    """
+
     def __init__(self, name):
         super().__init__(
             requisition_model='edc_metadata_rules.subjectrequisition',
             name=name)
 
-
-app_label = 'edc_metadata_rules'
 
 crfs0 = FormsCollection(
     Crf(show_order=1, model=f'{app_label}.crfone', required=True),
@@ -35,50 +41,50 @@ crfs2 = FormsCollection(
 requisitions0 = FormsCollection(
     Requisition(
         show_order=10,
-        panel=Panel('one'), required=False, additional=False),
+        panel=MockPanel('one'), required=False, additional=False),
     Requisition(
         show_order=20,
-        panel=Panel('two'), required=False, additional=False),
+        panel=MockPanel('two'), required=False, additional=False),
     Requisition(
         show_order=30,
-        panel=Panel('three'), required=False, additional=False),
+        panel=MockPanel('three'), required=False, additional=False),
     Requisition(
         show_order=40,
-        panel=Panel('four'), required=False, additional=False),
+        panel=MockPanel('four'), required=False, additional=False),
     Requisition(
         show_order=50,
-        panel=Panel('five'), required=False, additional=False),
+        panel=MockPanel('five'), required=False, additional=False),
     Requisition(
         show_order=60,
-        panel=Panel('six'), required=False, additional=False),
+        panel=MockPanel('six'), required=False, additional=False),
 )
 
 requisitions1 = FormsCollection(
     Requisition(
         show_order=10,
-        panel=Panel('four'), required=False, additional=False),
+        panel=MockPanel('four'), required=False, additional=False),
     Requisition(
         show_order=20,
-        panel=Panel('five'), required=False, additional=False),
+        panel=MockPanel('five'), required=False, additional=False),
     Requisition(
         show_order=30,
-        panel=Panel('six'), required=False, additional=False),
+        panel=MockPanel('six'), required=False, additional=False),
     Requisition(
         show_order=40,
-        panel=Panel('seven'), required=False, additional=False),
+        panel=MockPanel('seven'), required=False, additional=False),
     Requisition(
         show_order=50,
-        panel=Panel('eight'), required=False, additional=False),
+        panel=MockPanel('eight'), required=False, additional=False),
     Requisition(
         show_order=60,
-        panel=Panel('nine'), required=False, additional=False),
+        panel=MockPanel('nine'), required=False, additional=False),
 )
 
 
 requisitions2 = FormsCollection(
     Requisition(
         show_order=10,
-        panel=Panel('seven'), required=False, additional=False),
+        panel=MockPanel('seven'), required=False, additional=False),
 )
 
 visit0 = Visit(

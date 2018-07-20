@@ -2,16 +2,8 @@ from edc_reference import ReferenceModelConfig, site_reference_configs
 
 
 def register_to_site_reference_configs():
+
     site_reference_configs.registry = {}
-#     reference = ReferenceModelConfig(
-#         name='edc_metadata_rules.SubjectRequisition',
-#         fields=['panel_name'])
-#     site_reference_configs.register(reference)
-#
-#     reference = ReferenceModelConfig(
-#         name='edc_metadata_rules.SubjectRequisition',
-#         fields=['panel_name'])
-#     site_reference_configs.register(reference)
 
     reference = ReferenceModelConfig(
         name='edc_metadata_rules.CrfOne',

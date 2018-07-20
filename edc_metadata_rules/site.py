@@ -75,7 +75,7 @@ class SiteMetadataRules:
                 else:
                     sys.stdout.write(
                         f'   - imported metadata rules from \'{app}.{module_name}\'\n')
-            except ImportError as e:
+            except ImportError:
                 pass
 
 

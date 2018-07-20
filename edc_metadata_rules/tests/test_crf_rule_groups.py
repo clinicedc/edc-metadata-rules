@@ -201,7 +201,6 @@ class TestMetadataRules(TestCase):
         self.assertEqual(CrfMetadata.objects.get(
             model='edc_metadata_rules.crftwo').entry_status, KEYED)
 
-    @tag('2')
     def test_recovers_from_missing_metadata(self):
         subject_visit = self.enroll(gender=MALE)
         metadata_obj = CrfMetadata.objects.get(

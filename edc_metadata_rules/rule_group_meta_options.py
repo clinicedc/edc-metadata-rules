@@ -31,7 +31,8 @@ class RuleGroupMetaOptions:
             k: getattr(meta, k) for k in meta.__dict__ if not k.startswith('_')}
         # raise on any unknown attributes declared on the Meta class
         for meta_attr in self.options:
-            if meta_attr not in [k for k in self.default_meta_options if not k.startswith('_')]:
+            if meta_attr not in [
+                    k for k in self.default_meta_options if not k.startswith('_')]:
                 raise RuleGroupMetaError(
                     f'Invalid _meta attr. Got \'{meta_attr}\'. See {group_name}.')
         # default app_label to current module if not declared
