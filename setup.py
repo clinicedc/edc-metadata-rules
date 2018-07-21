@@ -20,7 +20,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     url='http://github/botswana-harvard/edc-metadata-rules',
-    license='GPL licence, see LICENCE',
+    license='GPL license, see LICENSE',
     description='Create rules to manipulate metadata (edc-metadata)',
     long_description=README,
     zip_safe=False,
