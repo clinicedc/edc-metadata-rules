@@ -25,6 +25,10 @@ setup(
     long_description=README,
     zip_safe=False,
     keywords='django Edc data entry metadata rules',
+    install_requires=[
+        'edc_metadata',
+        'edc_reference',
+    ],
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',

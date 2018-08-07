@@ -1,12 +1,12 @@
 import sys
 
-from tqdm import tqdm
 from django.apps import apps as django_apps
-from django.db.models import Count
-from django.core.management.base import BaseCommand
-from edc_metadata.models import RequisitionMetadata, CrfMetadata
-from edc_metadata.constants import KEYED
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.management.base import BaseCommand
+from django.db.models import Count
+from edc_metadata.constants import KEYED
+from edc_metadata.models import RequisitionMetadata, CrfMetadata
+from tqdm import tqdm
 
 
 class Command(BaseCommand):

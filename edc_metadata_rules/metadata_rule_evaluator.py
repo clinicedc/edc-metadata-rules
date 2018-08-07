@@ -1,4 +1,4 @@
-from edc_metadata_rules.site import site_metadata_rules
+from .site import site_metadata_rules
 
 
 class MetadataRuleEvaluator:

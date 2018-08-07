@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+
 from ...site import site_metadata_rules
 
 
