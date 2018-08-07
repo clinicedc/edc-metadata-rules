@@ -6,3 +6,4 @@ edc-offstudy
 edc-registration
 edc-visit-schedule
 edc-visit-tracking
+faker
