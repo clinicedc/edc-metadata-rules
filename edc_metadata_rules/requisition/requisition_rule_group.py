@@ -6,7 +6,7 @@ from ..rule_group import RuleGroup
 from ..rule_group_meta_options import RuleGroupMetaOptions
 from ..rule_group_metaclass import RuleGroupMetaclass
 
-RuleResult = namedtuple('RuleResult', 'target_panel entry_status')
+RuleResult = namedtuple("RuleResult", "target_panel entry_status")
 
 
 class RequisitionRuleGroupMetaOptionsError(ValidationError):
@@ -14,19 +14,17 @@ class RequisitionRuleGroupMetaOptionsError(ValidationError):
 
 
 class RequisitionRuleGroupMetaOptions(RuleGroupMetaOptions):
-
     def __init__(self, group_name, attrs):
         super().__init__(group_name, attrs)
-        self.requisition_model = self.options.get('requisition_model')
+        self.requisition_model = self.options.get("requisition_model")
         if self.requisition_model:
             try:
-                assert len(self.requisition_model.split('.')) == 2
+                assert len(self.requisition_model.split(".")) == 2
             except AssertionError:
-                self.requisition_model = f'{self.app_label}.{self.requisition_model}'
+                self.requisition_model = f"{self.app_label}.{self.requisition_model}"
                 self.options.update(requisition_model=self.requisition_model)
-            self.options.update(
-                target_models=[self.requisition_model])
-            rules = {k: v for k, v in attrs.items() if not k.startswith('_')}
+            self.options.update(target_models=[self.requisition_model])
+            rules = {k: v for k, v in attrs.items() if not k.startswith("_")}
             if self.requisition_model == self.source_model:
                 for name, rule in rules.items():
                     if not rule.source_panel:
@@ -34,8 +32,9 @@ class RequisitionRuleGroupMetaOptions(RuleGroupMetaOptions):
                             f'Rule expects "source_panel". Got '
                             f'requisition_model="{self.requisition_model}", '
                             f'source_model="{self.source_model}". '
-                            f'See {group_name}.{name}.',
-                            code='source_panel_expected')
+                            f"See {group_name}.{name}.",
+                            code="source_panel_expected",
+                        )
             else:
                 for name, rule in rules.items():
                     if rule.source_panel:
@@ -43,13 +42,14 @@ class RequisitionRuleGroupMetaOptions(RuleGroupMetaOptions):
                             f'Rule does not expect "source_panel". Got '
                             f'requisition_model="{self.requisition_model}", '
                             f'source_model="{self.source_model}". '
-                            f'See {group_name}.{name}.',
-                            code='source_panel_not_expected')
+                            f"See {group_name}.{name}.",
+                            code="source_panel_not_expected",
+                        )
 
     @property
     def default_meta_options(self):
         opts = super().default_meta_options
-        opts.extend(['requisition_model'])
+        opts.extend(["requisition_model"])
         return opts
 
 
@@ -69,8 +69,8 @@ class RequisitionRuleGroup(RuleGroup, metaclass=RequisitionMetaclass):
         """
         if visit.visit_code_sequence != 0:
             requisitions = (
-                visit.visit.requisitions_unscheduled
-                + visit.visit.requisitions_prn)
+                visit.visit.requisitions_unscheduled + visit.visit.requisitions_prn
+            )
         else:
             requisitions = visit.visit.requisitions + visit.visit.requisitions_prn
         return requisitions
@@ -84,7 +84,7 @@ class RequisitionRuleGroup(RuleGroup, metaclass=RequisitionMetaclass):
         """
         rule_results = OrderedDict()
         metadata_objects = OrderedDict()
-        for rule in cls._meta.options.get('rules'):
+        for rule in cls._meta.options.get("rules"):
             rule_results[str(rule)] = OrderedDict()
             for target_model, entry_status in rule.run(visit=visit).items():
                 rule_results[str(rule)].update({target_model: []})
@@ -92,14 +92,18 @@ class RequisitionRuleGroup(RuleGroup, metaclass=RequisitionMetaclass):
                     # only do something if target_panel is in
                     # visit.requisitions
                     if target_panel.name in [
-                            r.panel.name for r in cls.requisitions_for_visit(visit)]:
+                        r.panel.name for r in cls.requisitions_for_visit(visit)
+                    ]:
                         metadata_updater = cls.metadata_updater_cls(
                             visit=visit,
                             target_model=target_model,
-                            target_panel=target_panel)
+                            target_panel=target_panel,
+                        )
                         metadata_obj = metadata_updater.update(
-                            entry_status=entry_status)
+                            entry_status=entry_status
+                        )
                         metadata_objects.update({target_panel: metadata_obj})
                         rule_results[str(rule)][target_model].append(
-                            RuleResult(target_panel, entry_status))
+                            RuleResult(target_panel, entry_status)
+                        )
         return rule_results, metadata_objects

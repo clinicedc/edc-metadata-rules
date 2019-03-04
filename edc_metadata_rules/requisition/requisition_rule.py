@@ -9,7 +9,6 @@ class RequisitionRuleEvaluatorError(Exception):
 
 
 class RequisitionRuleEvaluator(RuleEvaluator):
-
     def __init__(self, source_panel=None, **kwargs):
         self.source_panel = source_panel
         super().__init__(**kwargs)

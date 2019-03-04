@@ -11,16 +11,23 @@ from tqdm import tqdm
 
 class Command(BaseCommand):
 
-    help = 'Performs a `get_model` for each target models referenced'
+    help = "Performs a `get_model` for each target models referenced"
 
     def handle(self, *args, **options):
 
-        grouping = RequisitionMetadata.objects.distinct().values(
-            'model').annotate(model_count=Count('model')).order_by()
-        requisition_models = [grp.get('model') for grp in grouping]
-        grouping = CrfMetadata.objects.values(
-            'model').annotate(model_count=Count('model')).order_by()
-        crf_models = [grp.get('model') for grp in grouping]
+        grouping = (
+            RequisitionMetadata.objects.distinct()
+            .values("model")
+            .annotate(model_count=Count("model"))
+            .order_by()
+        )
+        requisition_models = [grp.get("model") for grp in grouping]
+        grouping = (
+            CrfMetadata.objects.values("model")
+            .annotate(model_count=Count("model"))
+            .order_by()
+        )
+        crf_models = [grp.get("model") for grp in grouping]
 
         self.validate_requisitions(requisition_models)
         self.validate_crfs(crf_models)
@@ -38,7 +45,8 @@ class Command(BaseCommand):
                     model=model,
                     subject_identifier=obj.subject_identifier,
                     visit_code=obj.visit.visit_code,
-                    panel_name=obj.panel_name)
+                    panel_name=obj.panel_name,
+                )
                 try:
                     RequisitionMetadata.objects.get(**opts)
                 except ObjectDoesNotExist:
@@ -54,12 +62,14 @@ class Command(BaseCommand):
                         keyed += 1
                 perc = round((index / count) * 100)
                 sys.stdout.write(
-                    f' ( ) {model} exists={exists}/{count}, '
-                    f'keyed={keyed}/{count}, missing={doesnotexist}/{count}'
-                    f'    {perc}% \r')
+                    f" ( ) {model} exists={exists}/{count}, "
+                    f"keyed={keyed}/{count}, missing={doesnotexist}/{count}"
+                    f"    {perc}% \r"
+                )
             sys.stdout.write(
-                f' (*) {model} exists={exists}/{count}, keyed={keyed}/{count}, '
-                f'missing={doesnotexist}/{count}    {perc}% \n')
+                f" (*) {model} exists={exists}/{count}, keyed={keyed}/{count}, "
+                f"missing={doesnotexist}/{count}    {perc}% \n"
+            )
 
     def validate_crfs(self, crf_models):
         for model in tqdm(crf_models):
@@ -73,7 +83,8 @@ class Command(BaseCommand):
                 opts = dict(
                     model=model,
                     subject_identifier=obj.subject_identifier,
-                    visit_code=obj.visit.visit_code)
+                    visit_code=obj.visit.visit_code,
+                )
                 try:
                     CrfMetadata.objects.get(**opts)
                 except ObjectDoesNotExist:
@@ -89,8 +100,10 @@ class Command(BaseCommand):
                         keyed += 1
                 perc = round((index / count) * 100)
                 sys.stdout.write(
-                    f' ( ) {model} exists={exists}/{count}, keyed={keyed}/{count}, '
-                    f'missing={doesnotexist}/{count}    {perc}% \r')
+                    f" ( ) {model} exists={exists}/{count}, keyed={keyed}/{count}, "
+                    f"missing={doesnotexist}/{count}    {perc}% \r"
+                )
             sys.stdout.write(
-                f' (*) {model} exists={exists}/{count}, keyed={keyed}/{count}, '
-                f'missing={doesnotexist}/{count}    {perc}% \n')
+                f" (*) {model} exists={exists}/{count}, keyed={keyed}/{count}, "
+                f"missing={doesnotexist}/{count}    {perc}% \n"
+            )
