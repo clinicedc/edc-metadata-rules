@@ -17,7 +17,7 @@ class RuleGroupMetaclass(type):
 
     def __new__(cls, name, bases, attrs):
         try:
-            abstract = attrs.get('Meta', False).abstract
+            abstract = attrs.get("Meta", False).abstract
         except AttributeError:
             abstract = False
         parents = [b for b in bases if isinstance(b, RuleGroupMetaclass)]
@@ -29,8 +29,11 @@ class RuleGroupMetaclass(type):
         for parent in parents:
             try:
                 if parent.Meta.abstract:
-                    for rule in [member for member in inspect.getmembers(parent)
-                                 if isinstance(member[1], Rule)]:
+                    for rule in [
+                        member
+                        for member in inspect.getmembers(parent)
+                        if isinstance(member[1], Rule)
+                    ]:
                         parent_rule = copy.deepcopy(rule)
                         attrs.update({parent_rule[0]: parent_rule[1]})
             except AttributeError:
@@ -42,10 +45,9 @@ class RuleGroupMetaclass(type):
         rules = cls.__get_rules(name, attrs, meta)
         meta.options.update(rules=rules)
         # ... django style _meta
-        attrs.update({'_meta': meta})
+        attrs.update({"_meta": meta})
 
-        attrs.update(
-            {'name': f'{meta.app_label}.{name.lower()}'})
+        attrs.update({"name": f"{meta.app_label}.{name.lower()}"})
         return super().__new__(cls, name, bases, attrs)
 
     @classmethod
@@ -57,7 +59,7 @@ class RuleGroupMetaclass(type):
         """
         rules = []
         for key, value in attrs.items():
-            if not key.startswith('_'):
+            if not key.startswith("_"):
                 if isinstance(value, Rule):
                     rule = value
                     rule.name = key
@@ -79,8 +81,7 @@ class RuleGroupMetaclass(type):
         """
         target_models = []
         for target_model in rule.target_models:
-            if len(target_model.split('.')) != 2:
-                target_model = (
-                    f'{meta.app_label}.{target_model}')
+            if len(target_model.split(".")) != 2:
+                target_model = f"{meta.app_label}.{target_model}"
             target_models.append(target_model)
         return target_models

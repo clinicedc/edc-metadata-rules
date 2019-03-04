@@ -2,8 +2,6 @@ from datetime import date
 from django.db import models
 from django.db.models.deletion import PROTECT
 from edc_appointment.models import Appointment
-from edc_base import get_utcnow
-from edc_base.model_mixins import BaseUuidModel
 from edc_constants.choices import YES_NO
 from edc_constants.constants import MALE
 from edc_identifier.managers import SubjectIdentifierManager
@@ -12,9 +10,14 @@ from edc_lab.models.model_mixins.panel_model_mixin import PanelModelMixin
 from edc_metadata.model_mixins.creates import CreatesMetadataModelMixin
 from edc_metadata.model_mixins.updates import UpdatesCrfMetadataModelMixin
 from edc_metadata.model_mixins.updates import UpdatesRequisitionMetadataModelMixin
+from edc_model.models import BaseUuidModel
 from edc_offstudy.model_mixins import OffstudyModelMixin
-from edc_reference.model_mixins import ReferenceModelMixin, RequisitionReferenceModelMixin
+from edc_reference.model_mixins import (
+    ReferenceModelMixin,
+    RequisitionReferenceModelMixin,
+)
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
+from edc_utils import get_utcnow
 from edc_visit_schedule.model_mixins import OnScheduleModelMixin, OffScheduleModelMixin
 from edc_visit_tracking.model_mixins import VisitModelMixin, CrfModelMixin
 
@@ -30,7 +33,6 @@ class OffSchedule(OffScheduleModelMixin, BaseUuidModel):
 
 
 class SubjectOffstudy(OffstudyModelMixin, BaseUuidModel):
-
     class Meta(OffstudyModelMixin.Meta):
         pass
 
@@ -40,20 +42,22 @@ class DeathReport(UniqueSubjectIdentifierFieldMixin, BaseUuidModel):
     objects = SubjectIdentifierManager()
 
     def natural_key(self):
-        return (self.subject_identifier, )
+        return (self.subject_identifier,)
 
 
-class SubjectConsent(UniqueSubjectIdentifierFieldMixin,
-                     UpdatesOrCreatesRegistrationModelMixin,
-                     BaseUuidModel):
+class SubjectConsent(
+    UniqueSubjectIdentifierFieldMixin,
+    UpdatesOrCreatesRegistrationModelMixin,
+    BaseUuidModel,
+):
 
     consent_datetime = models.DateTimeField(default=get_utcnow)
 
-    version = models.CharField(max_length=25, default='1')
+    version = models.CharField(max_length=25, default="1")
 
-    identity = models.CharField(max_length=25, default='111111111')
+    identity = models.CharField(max_length=25, default="111111111")
 
-    confirm_identity = models.CharField(max_length=25, default='111111111')
+    confirm_identity = models.CharField(max_length=25, default="111111111")
 
     dob = models.DateField(default=date(1995, 1, 1))
 
@@ -62,11 +66,12 @@ class SubjectConsent(UniqueSubjectIdentifierFieldMixin,
     objects = SubjectIdentifierManager()
 
     def natural_key(self):
-        return (self.subject_identifier, )
+        return (self.subject_identifier,)
 
 
-class SubjectVisit(VisitModelMixin, ReferenceModelMixin,
-                   CreatesMetadataModelMixin, BaseUuidModel):
+class SubjectVisit(
+    VisitModelMixin, ReferenceModelMixin, CreatesMetadataModelMixin, BaseUuidModel
+):
 
     appointment = models.OneToOneField(Appointment, on_delete=PROTECT)
 
@@ -75,10 +80,13 @@ class SubjectVisit(VisitModelMixin, ReferenceModelMixin,
     reason = models.CharField(max_length=25)
 
 
-class SubjectRequisition(CrfModelMixin, RequisitionReferenceModelMixin,
-                         PanelModelMixin,
-                         UpdatesRequisitionMetadataModelMixin,
-                         BaseUuidModel):
+class SubjectRequisition(
+    CrfModelMixin,
+    RequisitionReferenceModelMixin,
+    PanelModelMixin,
+    UpdatesRequisitionMetadataModelMixin,
+    BaseUuidModel,
+):
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)
 
@@ -89,8 +97,9 @@ class SubjectRequisition(CrfModelMixin, RequisitionReferenceModelMixin,
     reason_not_drawn = models.CharField(max_length=25, null=True)
 
 
-class CrfOne(CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin,
-             BaseUuidModel):
+class CrfOne(
+    CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel
+):
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)
 
@@ -101,48 +110,54 @@ class CrfOne(CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin,
     f3 = models.CharField(max_length=50, null=True)
 
 
-class CrfTwo(CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin,
-             BaseUuidModel):
+class CrfTwo(
+    CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel
+):
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)
 
     f1 = models.CharField(max_length=50, null=True)
 
 
-class CrfThree(CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin,
-               BaseUuidModel):
+class CrfThree(
+    CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel
+):
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)
 
     f1 = models.CharField(max_length=50, null=True)
 
 
-class CrfFour(CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin,
-              BaseUuidModel):
+class CrfFour(
+    CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel
+):
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)
 
     f1 = models.CharField(max_length=50, null=True)
 
 
-class CrfFive(CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin,
-              BaseUuidModel):
+class CrfFive(
+    CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel
+):
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)
 
     f1 = models.CharField(max_length=50, null=True)
 
 
-class Crfsix(CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin,
-             BaseUuidModel):
+class Crfsix(
+    CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel
+):
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)
 
     f1 = models.CharField(max_length=50, null=True)
 
 
-class CrfSeven(CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin,
-               BaseUuidModel):
+class CrfSeven(
+    CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel
+):
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)
 

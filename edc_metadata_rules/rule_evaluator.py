@@ -28,8 +28,8 @@ class RuleEvaluator:
         self.result = None
         self.visit = visit
         options = dict(
-            visit=self.visit,
-            registered_subject=self.registered_subject, **kwargs)
+            visit=self.visit, registered_subject=self.registered_subject, **kwargs
+        )
         try:
             predicate = self.logic.predicate(**options)
         except NoValueError:
@@ -44,7 +44,7 @@ class RuleEvaluator:
 
     @property
     def registered_subject_model(self):
-        app_config = django_apps.get_app_config('edc_registration')
+        app_config = django_apps.get_app_config("edc_registration")
         return app_config.model
 
     @property
@@ -54,10 +54,12 @@ class RuleEvaluator:
         if not self._registered_subject:
             try:
                 self._registered_subject = self.registered_subject_model.objects.get(
-                    subject_identifier=self.visit.subject_identifier)
+                    subject_identifier=self.visit.subject_identifier
+                )
             except ObjectDoesNotExist as e:
                 raise RuleEvaluatorRegisterSubjectError(
-                    f'Registered subject required for rule {repr(self)}. '
-                    f'subject_identifier=\'{self.visit.subject_identifier}\'. '
-                    f'Got {e}.')
+                    f"Registered subject required for rule {repr(self)}. "
+                    f"subject_identifier='{self.visit.subject_identifier}'. "
+                    f"Got {e}."
+                )
         return self._registered_subject

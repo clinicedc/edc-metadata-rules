@@ -10,8 +10,9 @@ class NoValueError(Exception):
 
 
 class BasePredicate:
-
-    def get_value(self, attr=None, source_model=None, reference_getter_cls=None, **kwargs):
+    def get_value(
+        self, attr=None, source_model=None, reference_getter_cls=None, **kwargs
+    ):
         """Returns a value by checking for the attr on each arg.
 
         Each arg in args may be a model instance, queryset, or None.
@@ -32,24 +33,25 @@ class BasePredicate:
         if found_on_instance:
             value = getattr(found_on_instance, attr)
         else:
-            visit = kwargs.get('visit')
+            visit = kwargs.get("visit")
             opts = dict(
                 field_name=attr,
                 name=source_model,
                 subject_identifier=visit.subject_identifier,
                 report_datetime=visit.report_datetime,
-                visit_code=visit.visit_code)
+                visit_code=visit.visit_code,
+            )
             try:
                 reference = reference_getter_cls(**opts)
             except ReferenceObjectDoesNotExist as e:
                 raise NoValueError(
-                    f'No value found for {attr}. Given {kwargs}. Got {e}.')
+                    f"No value found for {attr}. Given {kwargs}. Got {e}."
+                )
             else:
                 if reference.has_value:
                     value = getattr(reference, attr)
                 else:
-                    raise NoValueError(
-                        f'No value found for {attr}. Given {kwargs}')
+                    raise NoValueError(f"No value found for {attr}. Given {kwargs}")
         return value
 
 
@@ -66,21 +68,21 @@ class P(BasePredicate):
     """
 
     funcs = {
-        'is': lambda x, y: True if x is y else False,
-        'is not': lambda x, y: True if x is not y else False,
-        'gt': lambda x, y: True if x > y else False,
-        '>': lambda x, y: True if x > y else False,
-        'gte': lambda x, y: True if x >= y else False,
-        '>=': lambda x, y: True if x >= y else False,
-        'lt': lambda x, y: True if x < y else False,
-        '<': lambda x, y: True if x < y else False,
-        'lte': lambda x, y: True if x <= y else False,
-        '<=': lambda x, y: True if x <= y else False,
-        'eq': lambda x, y: True if x == y else False,
-        'equals': lambda x, y: True if x == y else False,
-        '==': lambda x, y: True if x == y else False,
-        'neq': lambda x, y: True if x != y else False,
-        '!=': lambda x, y: True if x != y else False,
+        "is": lambda x, y: True if x is y else False,
+        "is not": lambda x, y: True if x is not y else False,
+        "gt": lambda x, y: True if x > y else False,
+        ">": lambda x, y: True if x > y else False,
+        "gte": lambda x, y: True if x >= y else False,
+        ">=": lambda x, y: True if x >= y else False,
+        "lt": lambda x, y: True if x < y else False,
+        "<": lambda x, y: True if x < y else False,
+        "lte": lambda x, y: True if x <= y else False,
+        "<=": lambda x, y: True if x <= y else False,
+        "eq": lambda x, y: True if x == y else False,
+        "equals": lambda x, y: True if x == y else False,
+        "==": lambda x, y: True if x == y else False,
+        "neq": lambda x, y: True if x != y else False,
+        "!=": lambda x, y: True if x != y else False,
     }
 
     def __init__(self, attr, operator, expected_value):
@@ -88,12 +90,14 @@ class P(BasePredicate):
         self.expected_value = expected_value
         self.func = self.funcs.get(operator)
         if not self.func:
-            raise PredicateError(f'Invalid operator. Got {operator}.')
+            raise PredicateError(f"Invalid operator. Got {operator}.")
         self.operator = operator
 
     def __repr__(self):
-        return (f'{self.__class__.__name__}({self.attr}, {self.operator}, '
-                f'{self.expected_value})')
+        return (
+            f"{self.__class__.__name__}({self.attr}, {self.operator}, "
+            f"{self.expected_value})"
+        )
 
     def __call__(self, **kwargs):
         value = self.get_value(attr=self.attr, **kwargs)
@@ -133,4 +137,4 @@ class PF(BasePredicate):
         return self.func(*values)
 
     def __repr__(self):
-        return f'{self.__class__.__name__}({self.attrs}, {self.func})'
+        return f"{self.__class__.__name__}({self.attrs}, {self.func})"

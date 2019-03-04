@@ -20,12 +20,13 @@ class PredicateCollection:
                 target_panels=[cd4_panel])
     """
 
-    app_label = 'edc_metadata'
+    app_label = "edc_metadata"
     visit_model = None
 
     def __init__(self):
         self.reference_model_cls = django_apps.get_model(
-            site_reference_configs.get_reference_model(self.visit_model))
+            site_reference_configs.get_reference_model(self.visit_model)
+        )
 
     def values(self, value=None, field_name=None, **kwargs):
         """Returns a list of matching values or an empty list.
@@ -47,6 +48,7 @@ class PredicateCollection:
             name=reference_name,
             visit_model=self.visit_model,
             reference_model_cls=self.reference_model_cls,
-            **options)
+            **options
+        )
         refsets = LongitudinalRefset(**opts)
         return refsets

@@ -16,9 +16,11 @@ def register(site=None, **kwargs):
 
         if not issubclass(rule_group_cls, (CrfRuleGroup, RequisitionRuleGroup)):
             raise RegisterRuleGroupError(
-                f'Wrapped class must a RuleGroup class. Got {rule_group_cls}')
+                f"Wrapped class must a RuleGroup class. Got {rule_group_cls}"
+            )
 
         site.register(rule_group_cls=rule_group_cls)
 
         return rule_group_cls
+
     return _rule_group_wrapper

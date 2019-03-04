@@ -15,9 +15,8 @@ class Rule:
 
     def __init__(self, predicate=None, consequence=None, alternative=None):
         self._logic = self.logic_cls(
-            predicate=predicate,
-            consequence=consequence,
-            alternative=alternative)
+            predicate=predicate, consequence=consequence, alternative=alternative
+        )
         self.target_models = None
         self.app_label = None  # set by metaclass
         self.group = None  # set by metaclass
@@ -34,19 +33,18 @@ class Rule:
                 pass
 
     def __repr__(self):
-        return (f'{self.__class__.__name__}(name=\'{self.name}\', group=\'{self.group}\')')
+        return f"{self.__class__.__name__}(name='{self.name}', group='{self.group}')"
 
     def __str__(self):
-        return f'{self.group}.{self.name}'
+        return f"{self.group}.{self.name}"
 
     def run(self, visit=None):
         """Returns a dictionary of {target_model: entry_status, ...} updated
         by running the rule for each target model given a visit.
         """
         result = OrderedDict()
-        opts = {k: v for k, v in self.__dict__.items() if k.startswith != '_'}
-        rule_evaluator = self.rule_evaluator_cls(
-            visit=visit, logic=self._logic, **opts)
+        opts = {k: v for k, v in self.__dict__.items() if k.startswith != "_"}
+        rule_evaluator = self.rule_evaluator_cls(visit=visit, logic=self._logic, **opts)
         entry_status = rule_evaluator.result
         for target_model in self.target_models:
             result.update({target_model: entry_status})
