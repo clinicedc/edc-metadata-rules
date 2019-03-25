@@ -6,7 +6,7 @@ from edc_constants.choices import YES_NO
 from edc_constants.constants import MALE
 from edc_identifier.managers import SubjectIdentifierManager
 from edc_identifier.model_mixins import UniqueSubjectIdentifierFieldMixin
-from edc_lab.models.model_mixins.panel_model_mixin import PanelModelMixin
+from edc_lab.model_mixins import PanelModelMixin
 from edc_metadata.model_mixins.creates import CreatesMetadataModelMixin
 from edc_metadata.model_mixins.updates import UpdatesCrfMetadataModelMixin
 from edc_metadata.model_mixins.updates import UpdatesRequisitionMetadataModelMixin
