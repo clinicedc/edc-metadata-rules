@@ -10,6 +10,7 @@ from ..predicate import P
 from ..site import SiteMetadataRulesAlreadyRegistered
 from ..site import site_metadata_rules, SiteMetadataNoRulesError
 from .reference_configs import register_to_site_reference_configs
+from edc_facility.import_holidays import import_holidays
 
 
 class RuleGroupWithoutRules(CrfRuleGroup):
@@ -45,8 +46,13 @@ class RuleGroupWithRules2(CrfRuleGroup):
 
 
 class TestSiteMetadataRules(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
+        import_holidays()
         register_to_site_reference_configs()
+        return super().setUpClass()
+
+    def setUp(self):
         site_metadata_rules.registry = OrderedDict()
 
     def test_register_rule_group_no_rules_raises_on_register(self):
@@ -71,7 +77,8 @@ class TestSiteMetadataRules(TestCase):
         site_metadata_rules.register(RuleGroupWithRules)
         site_metadata_rules.register(RuleGroupWithRules2)
         rule_groups = site_metadata_rules.rule_groups.get("edc_metadata_rules")
-        self.assertEqual(rule_groups, [RuleGroupWithRules, RuleGroupWithRules2])
+        self.assertEqual(
+            rule_groups, [RuleGroupWithRules, RuleGroupWithRules2])
 
     def test_register_twice_raises(self):
         site_metadata_rules.register(rule_group_cls=RuleGroupWithRules)

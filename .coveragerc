@@ -1,6 +1,4 @@
 [run]
-omit =
-    */wsgi.py
-    setup.py
-    manage.py
-    */migrations/*
+include = edc_metadata_rules/*
+omit = edc_metadata_rules/tests/*,edc_metadata_rules/migrations/*
+branch = 1

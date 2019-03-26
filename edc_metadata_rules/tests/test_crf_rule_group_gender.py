@@ -109,10 +109,14 @@ class CrfRuleGroupGender(CrfRuleGroup):
 
 
 class TestMetadataRulesWithGender(TestCase):
-    def setUp(self):
 
+    @classmethod
+    def setUpClass(cls):
         import_holidays()
         register_to_site_reference_configs()
+        return super(TestMetadataRulesWithGender, cls).setUpClass()
+
+    def setUp(self):
         site_visit_schedules._registry = {}
         site_visit_schedules.loaded = False
         site_visit_schedules.register(visit_schedule)
@@ -344,13 +348,16 @@ class TestMetadataRulesWithGender(TestCase):
         subject_visit = self.enroll(gender=MALE)
         _, metadata_objects = CrfRuleGroupGender().evaluate_rules(visit=subject_visit)
         self.assertEqual(
-            metadata_objects.get("edc_metadata_rules.crffour").entry_status, REQUIRED
+            metadata_objects.get(
+                "edc_metadata_rules.crffour").entry_status, REQUIRED
         )
         self.assertEqual(
-            metadata_objects.get("edc_metadata_rules.crffive").entry_status, REQUIRED
+            metadata_objects.get(
+                "edc_metadata_rules.crffive").entry_status, REQUIRED
         )
         self.assertEqual(
-            metadata_objects.get("edc_metadata_rules.crftwo").entry_status, NOT_REQUIRED
+            metadata_objects.get(
+                "edc_metadata_rules.crftwo").entry_status, NOT_REQUIRED
         )
         self.assertEqual(
             metadata_objects.get("edc_metadata_rules.crfthree").entry_status,
