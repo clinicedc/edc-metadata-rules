@@ -133,10 +133,13 @@ class MyRequisitionRuleGroup(BaseRequisitionRuleGroup):
 
 
 class TestRequisitionRuleGroup(TestCase):
-    def setUp(self):
-
+    @classmethod
+    def setUpClass(cls):
         import_holidays()
         register_to_site_reference_configs()
+        return super().setUpClass()
+
+    def setUp(self):
         self.panel_one = Panel.objects.create(name=panel_one.name)
         self.panel_two = Panel.objects.create(name=panel_two.name)
         self.panel_three = Panel.objects.create(name=panel_three.name)
@@ -385,7 +388,8 @@ class TestRequisitionRuleGroup(TestCase):
         self.assertEqual(metadata_obj.entry_status, NOT_REQUIRED)
 
         # create CRF that triggers rule to REQUIRED
-        crf_one = CrfOne.objects.create(subject_visit=subject_visit, f1="hello")
+        crf_one = CrfOne.objects.create(
+            subject_visit=subject_visit, f1="hello")
         metadata_obj = RequisitionMetadata.objects.get(
             model="edc_metadata_rules.subjectrequisition",
             subject_identifier=subject_visit.subject_identifier,
@@ -456,7 +460,8 @@ class TestRequisitionRuleGroup(TestCase):
         )
 
         # create CRF that triggers rule to REQUIRED
-        crf_one = CrfOne.objects.create(subject_visit=subject_visit, f1="hello")
+        crf_one = CrfOne.objects.create(
+            subject_visit=subject_visit, f1="hello")
         metadata_obj = RequisitionMetadata.objects.get(
             model="edc_metadata_rules.subjectrequisition",
             subject_identifier=subject_visit.subject_identifier,
@@ -506,7 +511,8 @@ class TestRequisitionRuleGroup(TestCase):
         )
 
         # create CRF that triggers rule to REQUIRED
-        crf_one = CrfOne.objects.create(subject_visit=subject_visit, f1="hello")
+        crf_one = CrfOne.objects.create(
+            subject_visit=subject_visit, f1="hello")
         metadata_obj = RequisitionMetadata.objects.get(
             model="edc_metadata_rules.subjectrequisition",
             subject_identifier=subject_visit.subject_identifier,

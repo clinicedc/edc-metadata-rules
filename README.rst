@@ -1,4 +1,4 @@
-|pypi| |travis| |coverage|
+|pypi| |travis| |codecov| |downloads|
 
 
 edc-metadata-rules
@@ -13,5 +13,8 @@ Create rules to manipulate metadata (edc-metadata)
 .. |travis| image:: https://travis-ci.org/clinicedc/edc-metadata-rules.svg?branch=develop
     :target: https://travis-ci.org/clinicedc/edc-metadata-rules
     
-.. |coverage| image:: https://coveralls.io/repos/github/clinicedc/edc-metadata-rules/badge.svg?branch=develop
-    :target: https://coveralls.io/github/clinicedc/edc-metadata-rules?branch=develop
+.. |codecov| image:: https://codecov.io/gh/clinicedc/edc-metadata-rules/branch/develop/graph/badge.svg
+  :target: https://codecov.io/gh/clinicedc/edc-metadata-rules
+
+.. |downloads| image:: https://pepy.tech/badge/edc-metadata-rules
+   :target: https://pepy.tech/project/edc-metadata-rules
