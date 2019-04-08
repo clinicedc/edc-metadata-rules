@@ -2,7 +2,7 @@ import sys
 
 from django.apps import apps as django_apps
 from django.core.management.color import color_style
-from edc_reference.site import site_reference_configs
+from edc_reference.site_reference import site_reference_configs
 
 style = color_style()
 
