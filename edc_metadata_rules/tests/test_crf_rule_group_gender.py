@@ -5,7 +5,7 @@ from edc_facility.import_holidays import import_holidays
 from edc_metadata import NOT_REQUIRED, REQUIRED
 from edc_metadata.models import CrfMetadata
 from edc_metadata.target_handler import TargetModelConflict
-from edc_reference.site import site_reference_configs
+from edc_reference.site_reference import site_reference_configs
 from edc_registration.models import RegisteredSubject
 from edc_utils import get_utcnow
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
@@ -109,7 +109,6 @@ class CrfRuleGroupGender(CrfRuleGroup):
 
 
 class TestMetadataRulesWithGender(TestCase):
-
     @classmethod
     def setUpClass(cls):
         import_holidays()
@@ -348,16 +347,13 @@ class TestMetadataRulesWithGender(TestCase):
         subject_visit = self.enroll(gender=MALE)
         _, metadata_objects = CrfRuleGroupGender().evaluate_rules(visit=subject_visit)
         self.assertEqual(
-            metadata_objects.get(
-                "edc_metadata_rules.crffour").entry_status, REQUIRED
+            metadata_objects.get("edc_metadata_rules.crffour").entry_status, REQUIRED
         )
         self.assertEqual(
-            metadata_objects.get(
-                "edc_metadata_rules.crffive").entry_status, REQUIRED
+            metadata_objects.get("edc_metadata_rules.crffive").entry_status, REQUIRED
         )
         self.assertEqual(
-            metadata_objects.get(
-                "edc_metadata_rules.crftwo").entry_status, NOT_REQUIRED
+            metadata_objects.get("edc_metadata_rules.crftwo").entry_status, NOT_REQUIRED
         )
         self.assertEqual(
             metadata_objects.get("edc_metadata_rules.crfthree").entry_status,

@@ -77,8 +77,7 @@ class TestSiteMetadataRules(TestCase):
         site_metadata_rules.register(RuleGroupWithRules)
         site_metadata_rules.register(RuleGroupWithRules2)
         rule_groups = site_metadata_rules.rule_groups.get("edc_metadata_rules")
-        self.assertEqual(
-            rule_groups, [RuleGroupWithRules, RuleGroupWithRules2])
+        self.assertEqual(rule_groups, [RuleGroupWithRules, RuleGroupWithRules2])
 
     def test_register_twice_raises(self):
         site_metadata_rules.register(rule_group_cls=RuleGroupWithRules)

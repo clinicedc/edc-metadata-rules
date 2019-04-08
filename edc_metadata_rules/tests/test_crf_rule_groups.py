@@ -5,7 +5,7 @@ from edc_constants.constants import MALE
 from edc_facility.import_holidays import import_holidays
 from edc_metadata import NOT_REQUIRED, REQUIRED, KEYED
 from edc_metadata.models import CrfMetadata
-from edc_reference.site import site_reference_configs
+from edc_reference.site_reference import site_reference_configs
 from edc_utils import get_utcnow
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_visit_tracking.constants import SCHEDULED
@@ -116,26 +116,22 @@ class CrfRuleGroupTwo(CrfRuleGroup):
         """
         subject_visit = self.enroll(gender=MALE)
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             REQUIRED,
         )
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crfthree").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crfthree").entry_status,
             REQUIRED,
         )
 
         CrfOne.objects.create(subject_visit=subject_visit, f1="car")
 
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             REQUIRED,
         )
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crfthree").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crfthree").entry_status,
             NOT_REQUIRED,
         )
 
@@ -145,39 +141,33 @@ class CrfRuleGroupTwo(CrfRuleGroup):
 
         subject_visit = self.enroll(gender=MALE)
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             REQUIRED,
         )
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crfthree").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crfthree").entry_status,
             REQUIRED,
         )
 
         CrfOne.objects.create(subject_visit=subject_visit, f3="bicycle")
 
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             NOT_REQUIRED,
         )
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crfthree").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crfthree").entry_status,
             REQUIRED,
         )
 
         subject_visit.save()
 
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             NOT_REQUIRED,
         )
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crfthree").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crfthree").entry_status,
             REQUIRED,
         )
 
@@ -188,27 +178,22 @@ class CrfRuleGroupTwo(CrfRuleGroup):
 
         subject_visit = self.enroll(gender=MALE)
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             REQUIRED,
         )
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crfthree").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crfthree").entry_status,
             REQUIRED,
         )
 
-        crf_one = CrfOne.objects.create(
-            subject_visit=subject_visit, f1="not car")
+        crf_one = CrfOne.objects.create(subject_visit=subject_visit, f1="not car")
 
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             NOT_REQUIRED,
         )
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crfthree").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crfthree").entry_status,
             NOT_REQUIRED,
         )
 
@@ -216,13 +201,11 @@ class CrfRuleGroupTwo(CrfRuleGroup):
         crf_one.save()
 
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             REQUIRED,
         )
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crfthree").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crfthree").entry_status,
             NOT_REQUIRED,
         )
 
@@ -230,13 +213,11 @@ class CrfRuleGroupTwo(CrfRuleGroup):
         crf_one.save()
 
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             REQUIRED,
         )
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crfthree").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crfthree").entry_status,
             REQUIRED,
         )
 
@@ -245,25 +226,21 @@ class CrfRuleGroupTwo(CrfRuleGroup):
         """
         subject_visit = self.enroll(gender=MALE)
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             REQUIRED,
         )
 
         CrfTwo.objects.create(subject_visit=subject_visit)
 
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             KEYED,
         )
 
-        crf_one = CrfOne.objects.create(
-            subject_visit=subject_visit, f1="not car")
+        crf_one = CrfOne.objects.create(subject_visit=subject_visit, f1="not car")
 
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             KEYED,
         )
 
@@ -271,23 +248,20 @@ class CrfRuleGroupTwo(CrfRuleGroup):
         crf_one.save()
 
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             KEYED,
         )
 
     def test_recovers_from_missing_metadata(self):
         subject_visit = self.enroll(gender=MALE)
-        metadata_obj = CrfMetadata.objects.get(
-            model="edc_metadata_rules.crftwo")
+        metadata_obj = CrfMetadata.objects.get(model="edc_metadata_rules.crftwo")
         self.assertEqual(metadata_obj.entry_status, REQUIRED)
 
         metadata_obj.delete()
 
         CrfTwo.objects.create(subject_visit=subject_visit)
 
-        metadata_obj = CrfMetadata.objects.get(
-            model="edc_metadata_rules.crftwo")
+        metadata_obj = CrfMetadata.objects.get(model="edc_metadata_rules.crftwo")
         self.assertEqual(metadata_obj.entry_status, KEYED)
 
     def test_delete(self):
@@ -295,24 +269,21 @@ class CrfRuleGroupTwo(CrfRuleGroup):
         """
         subject_visit = self.enroll(gender=MALE)
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             REQUIRED,
         )
 
         crf_two = CrfTwo.objects.create(subject_visit=subject_visit)
 
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             KEYED,
         )
 
         crf_two.delete()
 
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             REQUIRED,
         )
 
@@ -321,8 +292,7 @@ class CrfRuleGroupTwo(CrfRuleGroup):
         """
         subject_visit = self.enroll(gender=MALE)
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             REQUIRED,
         )
 
@@ -331,15 +301,13 @@ class CrfRuleGroupTwo(CrfRuleGroup):
         CrfOne.objects.create(subject_visit=subject_visit, f1="not car")
 
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             KEYED,
         )
 
         crf_two.delete()
 
         self.assertEqual(
-            CrfMetadata.objects.get(
-                model="edc_metadata_rules.crftwo").entry_status,
+            CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
             NOT_REQUIRED,
         )

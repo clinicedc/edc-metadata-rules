@@ -388,8 +388,7 @@ class TestRequisitionRuleGroup(TestCase):
         self.assertEqual(metadata_obj.entry_status, NOT_REQUIRED)
 
         # create CRF that triggers rule to REQUIRED
-        crf_one = CrfOne.objects.create(
-            subject_visit=subject_visit, f1="hello")
+        crf_one = CrfOne.objects.create(subject_visit=subject_visit, f1="hello")
         metadata_obj = RequisitionMetadata.objects.get(
             model="edc_metadata_rules.subjectrequisition",
             subject_identifier=subject_visit.subject_identifier,
@@ -460,8 +459,7 @@ class TestRequisitionRuleGroup(TestCase):
         )
 
         # create CRF that triggers rule to REQUIRED
-        crf_one = CrfOne.objects.create(
-            subject_visit=subject_visit, f1="hello")
+        crf_one = CrfOne.objects.create(subject_visit=subject_visit, f1="hello")
         metadata_obj = RequisitionMetadata.objects.get(
             model="edc_metadata_rules.subjectrequisition",
             subject_identifier=subject_visit.subject_identifier,
@@ -511,8 +509,7 @@ class TestRequisitionRuleGroup(TestCase):
         )
 
         # create CRF that triggers rule to REQUIRED
-        crf_one = CrfOne.objects.create(
-            subject_visit=subject_visit, f1="hello")
+        crf_one = CrfOne.objects.create(subject_visit=subject_visit, f1="hello")
         metadata_obj = RequisitionMetadata.objects.get(
             model="edc_metadata_rules.subjectrequisition",
             subject_identifier=subject_visit.subject_identifier,
