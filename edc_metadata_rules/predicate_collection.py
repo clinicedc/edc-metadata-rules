@@ -1,5 +1,5 @@
 from django.apps import apps as django_apps
-from edc_reference import LongitudinalRefset, site_reference_configs
+from edc_reference import LongitudinalRefsets, site_reference_configs
 
 
 class PredicateCollection:
@@ -50,5 +50,5 @@ class PredicateCollection:
             reference_model_cls=self.reference_model_cls,
             **options
         )
-        refsets = LongitudinalRefset(**opts)
+        refsets = LongitudinalRefsets(**opts)
         return refsets
