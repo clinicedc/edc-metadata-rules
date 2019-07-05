@@ -39,7 +39,7 @@ class BasePredicate:
                 name=source_model,
                 subject_identifier=visit.subject_identifier,
                 report_datetime=visit.report_datetime,
-                visit_code=visit.visit_code,
+                timepoint=visit.timepoint,
             )
             try:
                 reference = reference_getter_cls(**opts)
