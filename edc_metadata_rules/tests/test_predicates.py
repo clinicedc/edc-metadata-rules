@@ -14,6 +14,7 @@ from ..predicate import PF, P, NoValueError
 from .models import SubjectVisit, SubjectConsent, CrfOne
 from .reference_configs import register_to_site_reference_configs
 from .visit_schedule import visit_schedule
+from pprint import pprint
 
 fake = Faker()
 
@@ -108,6 +109,7 @@ class TestPredicates(TestCase):
         )
         self.assertRaises(NoValueError, P("f1", "eq", "car"), **opts)
 
+    @tag("1")
     def test_p_with_field_on_source_keyed_value_none(self):
         visit = self.enroll(gender=FEMALE)
         opts = dict(

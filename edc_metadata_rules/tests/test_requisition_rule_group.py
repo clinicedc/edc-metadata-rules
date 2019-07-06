@@ -307,7 +307,10 @@ class TestRequisitionRuleGroup(TestCase):
         site_metadata_rules.registry = OrderedDict()
         site_metadata_rules.register(RequisitionRuleGroup2)
         Reference.objects.create(
-            timepoint=subject_visit.visit_code,
+            visit_schedule_name=subject_visit.visit_schedule_name,
+            schedule_name=subject_visit.schedule_name,
+            visit_code=subject_visit.visit_code,
+            timepoint=subject_visit.timepoint,
             identifier=subject_visit.subject_identifier,
             report_datetime=subject_visit.report_datetime,
             field_name="panel",
@@ -371,7 +374,10 @@ class TestRequisitionRuleGroup(TestCase):
         site_metadata_rules.registry = OrderedDict()
         site_metadata_rules.register(RequisitionRuleGroup3)
         Reference.objects.create(
-            timepoint=subject_visit.visit_code,
+            visit_schedule_name=subject_visit.visit_schedule_name,
+            schedule_name=subject_visit.schedule_name,
+            visit_code=subject_visit.visit_code,
+            timepoint=subject_visit.timepoint,
             identifier=subject_visit.subject_identifier,
             report_datetime=subject_visit.report_datetime,
             field_name="panel",
@@ -451,7 +457,10 @@ class TestRequisitionRuleGroup(TestCase):
         site_metadata_rules.registry = OrderedDict()
         site_metadata_rules.register(RequisitionRuleGroup3)
         Reference.objects.create(
-            timepoint=subject_visit.visit_code,
+            visit_schedule_name=subject_visit.visit_schedule_name,
+            schedule_name=subject_visit.schedule_name,
+            visit_code=subject_visit.visit_code,
+            timepoint=subject_visit.timepoint,
             identifier=subject_visit.subject_identifier,
             report_datetime=subject_visit.report_datetime,
             field_name="panel",
@@ -501,7 +510,10 @@ class TestRequisitionRuleGroup(TestCase):
         site_metadata_rules.registry = OrderedDict()
         site_metadata_rules.register(RequisitionRuleGroup3)
         Reference.objects.create(
-            timepoint=subject_visit.visit_code,
+            visit_schedule_name=subject_visit.visit_schedule_name,
+            schedule_name=subject_visit.schedule_name,
+            visit_code=subject_visit.visit_code,
+            timepoint=subject_visit.timepoint,
             identifier=subject_visit.subject_identifier,
             report_datetime=subject_visit.report_datetime,
             field_name="panel",
