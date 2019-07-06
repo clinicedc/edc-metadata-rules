@@ -39,6 +39,9 @@ class BasePredicate:
                 name=source_model,
                 subject_identifier=visit.subject_identifier,
                 report_datetime=visit.report_datetime,
+                visit_schedule_name=visit.visit_schedule_name,
+                schedule_name=visit.schedule_name,
+                visit_code=visit.visit_code,
                 timepoint=visit.timepoint,
             )
             try:
