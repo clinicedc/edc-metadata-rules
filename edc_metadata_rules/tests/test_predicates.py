@@ -14,7 +14,6 @@ from ..predicate import PF, P, NoValueError
 from .models import SubjectVisit, SubjectConsent, CrfOne
 from .reference_configs import register_to_site_reference_configs
 from .visit_schedule import visit_schedule
-from pprint import pprint
 
 fake = Faker()
 
