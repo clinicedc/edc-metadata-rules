@@ -20,6 +20,7 @@ from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 from edc_utils import get_utcnow
 from edc_visit_schedule.model_mixins import OnScheduleModelMixin, OffScheduleModelMixin
 from edc_visit_tracking.model_mixins import VisitModelMixin, CrfModelMixin
+from edc_sites.models import SiteModelMixin
 
 
 class OnSchedule(OnScheduleModelMixin, BaseUuidModel):
@@ -70,7 +71,11 @@ class SubjectConsent(
 
 
 class SubjectVisit(
-    VisitModelMixin, ReferenceModelMixin, CreatesMetadataModelMixin, BaseUuidModel
+    VisitModelMixin,
+    ReferenceModelMixin,
+    CreatesMetadataModelMixin,
+    SiteModelMixin,
+    BaseUuidModel,
 ):
 
     appointment = models.OneToOneField(Appointment, on_delete=PROTECT)
@@ -85,6 +90,7 @@ class SubjectRequisition(
     RequisitionReferenceModelMixin,
     PanelModelMixin,
     UpdatesRequisitionMetadataModelMixin,
+    SiteModelMixin,
     BaseUuidModel,
 ):
 
@@ -98,7 +104,11 @@ class SubjectRequisition(
 
 
 class CrfOne(
-    CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel
+    CrfModelMixin,
+    ReferenceModelMixin,
+    UpdatesCrfMetadataModelMixin,
+    SiteModelMixin,
+    BaseUuidModel,
 ):
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)
@@ -111,7 +121,11 @@ class CrfOne(
 
 
 class CrfTwo(
-    CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel
+    CrfModelMixin,
+    ReferenceModelMixin,
+    UpdatesCrfMetadataModelMixin,
+    SiteModelMixin,
+    BaseUuidModel,
 ):
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)
@@ -120,7 +134,11 @@ class CrfTwo(
 
 
 class CrfThree(
-    CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel
+    CrfModelMixin,
+    ReferenceModelMixin,
+    UpdatesCrfMetadataModelMixin,
+    SiteModelMixin,
+    BaseUuidModel,
 ):
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)
@@ -129,7 +147,11 @@ class CrfThree(
 
 
 class CrfFour(
-    CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel
+    CrfModelMixin,
+    ReferenceModelMixin,
+    UpdatesCrfMetadataModelMixin,
+    SiteModelMixin,
+    BaseUuidModel,
 ):
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)
@@ -138,7 +160,11 @@ class CrfFour(
 
 
 class CrfFive(
-    CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel
+    CrfModelMixin,
+    ReferenceModelMixin,
+    UpdatesCrfMetadataModelMixin,
+    SiteModelMixin,
+    BaseUuidModel,
 ):
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)
@@ -147,7 +173,11 @@ class CrfFive(
 
 
 class Crfsix(
-    CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel
+    CrfModelMixin,
+    ReferenceModelMixin,
+    UpdatesCrfMetadataModelMixin,
+    SiteModelMixin,
+    BaseUuidModel,
 ):
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)
@@ -156,7 +186,11 @@ class Crfsix(
 
 
 class CrfSeven(
-    CrfModelMixin, ReferenceModelMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel
+    CrfModelMixin,
+    ReferenceModelMixin,
+    UpdatesCrfMetadataModelMixin,
+    SiteModelMixin,
+    BaseUuidModel,
 ):
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)
