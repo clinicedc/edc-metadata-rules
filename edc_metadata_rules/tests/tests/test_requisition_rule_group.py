@@ -12,14 +12,14 @@ from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
 
-from ..predicate import P
-from ..requisition import RequisitionRuleGroupMetaOptionsError
-from ..requisition import RequisitionRuleGroup, RequisitionRule
-from ..site import site_metadata_rules
-from .models import Appointment, SubjectVisit, SubjectConsent, SubjectRequisition
-from .models import CrfOne
-from .reference_configs import register_to_site_reference_configs
-from .visit_schedule import visit_schedule
+from ...predicate import P
+from ...requisition import RequisitionRuleGroupMetaOptionsError
+from ...requisition import RequisitionRuleGroup, RequisitionRule
+from ...site import site_metadata_rules
+from ..models import Appointment, SubjectVisit, SubjectConsent, SubjectRequisition
+from ..models import CrfOne
+from ..reference_configs import register_to_site_reference_configs
+from ..visit_schedule import visit_schedule
 
 fake = Faker()
 

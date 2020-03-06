@@ -2,15 +2,15 @@ from collections import OrderedDict
 from django.test import TestCase, tag
 
 from edc_constants.constants import MALE
+from edc_facility.import_holidays import import_holidays
 from edc_metadata import REQUIRED, NOT_REQUIRED
 
-from ..crf import CrfRule, CrfRuleGroup
-from ..decorators import register, RegisterRuleGroupError
-from ..predicate import P
-from ..site import SiteMetadataRulesAlreadyRegistered
-from ..site import site_metadata_rules, SiteMetadataNoRulesError
-from .reference_configs import register_to_site_reference_configs
-from edc_facility.import_holidays import import_holidays
+from ...crf import CrfRule, CrfRuleGroup
+from ...decorators import register, RegisterRuleGroupError
+from ...predicate import P
+from ...site import SiteMetadataRulesAlreadyRegistered
+from ...site import site_metadata_rules, SiteMetadataNoRulesError
+from ..reference_configs import register_to_site_reference_configs
 
 
 class RuleGroupWithoutRules(CrfRuleGroup):

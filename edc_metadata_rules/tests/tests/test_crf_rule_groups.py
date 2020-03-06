@@ -11,13 +11,13 @@ from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
 
-from ..crf import CrfRuleGroup, CrfRule
-from ..predicate import P
-from ..site import site_metadata_rules
-from .reference_configs import register_to_site_reference_configs
-from .models import Appointment, SubjectVisit
-from .models import CrfOne, CrfTwo, SubjectConsent
-from .visit_schedule import visit_schedule
+from ...crf import CrfRuleGroup, CrfRule
+from ...predicate import P
+from ...site import site_metadata_rules
+from ..reference_configs import register_to_site_reference_configs
+from ..models import Appointment, SubjectVisit
+from ..models import CrfOne, CrfTwo, SubjectConsent
+from ..visit_schedule import visit_schedule
 
 fake = Faker()
 edc_registration_app_config = django_apps.get_app_config("edc_registration")
