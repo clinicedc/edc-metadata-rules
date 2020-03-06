@@ -1,4 +1,4 @@
-edc_metadata/migrations/*
+django_crypto_fields
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
