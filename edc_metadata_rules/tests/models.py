@@ -19,7 +19,10 @@ from edc_reference.model_mixins import (
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 from edc_utils import get_utcnow
 from edc_visit_schedule.model_mixins import OnScheduleModelMixin, OffScheduleModelMixin
-from edc_visit_tracking.model_mixins import VisitModelMixin, CrfModelMixin
+from edc_visit_tracking.model_mixins import (
+    VisitModelMixin,
+    VisitTrackingCrfModelMixin,
+)
 from edc_sites.models import SiteModelMixin
 
 
@@ -86,7 +89,7 @@ class SubjectVisit(
 
 
 class SubjectRequisition(
-    CrfModelMixin,
+    VisitTrackingCrfModelMixin,
     RequisitionReferenceModelMixin,
     PanelModelMixin,
     UpdatesRequisitionMetadataModelMixin,
@@ -104,7 +107,7 @@ class SubjectRequisition(
 
 
 class CrfOne(
-    CrfModelMixin,
+    VisitTrackingCrfModelMixin,
     ReferenceModelMixin,
     UpdatesCrfMetadataModelMixin,
     SiteModelMixin,
@@ -121,7 +124,7 @@ class CrfOne(
 
 
 class CrfTwo(
-    CrfModelMixin,
+    VisitTrackingCrfModelMixin,
     ReferenceModelMixin,
     UpdatesCrfMetadataModelMixin,
     SiteModelMixin,
@@ -134,7 +137,7 @@ class CrfTwo(
 
 
 class CrfThree(
-    CrfModelMixin,
+    VisitTrackingCrfModelMixin,
     ReferenceModelMixin,
     UpdatesCrfMetadataModelMixin,
     SiteModelMixin,
@@ -147,7 +150,7 @@ class CrfThree(
 
 
 class CrfFour(
-    CrfModelMixin,
+    VisitTrackingCrfModelMixin,
     ReferenceModelMixin,
     UpdatesCrfMetadataModelMixin,
     SiteModelMixin,
@@ -160,7 +163,7 @@ class CrfFour(
 
 
 class CrfFive(
-    CrfModelMixin,
+    VisitTrackingCrfModelMixin,
     ReferenceModelMixin,
     UpdatesCrfMetadataModelMixin,
     SiteModelMixin,
@@ -173,7 +176,7 @@ class CrfFive(
 
 
 class Crfsix(
-    CrfModelMixin,
+    VisitTrackingCrfModelMixin,
     ReferenceModelMixin,
     UpdatesCrfMetadataModelMixin,
     SiteModelMixin,
@@ -186,7 +189,7 @@ class Crfsix(
 
 
 class CrfSeven(
-    CrfModelMixin,
+    VisitTrackingCrfModelMixin,
     ReferenceModelMixin,
     UpdatesCrfMetadataModelMixin,
     SiteModelMixin,

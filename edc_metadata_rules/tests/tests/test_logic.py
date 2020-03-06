@@ -2,7 +2,7 @@ from django.test import TestCase, tag
 
 from edc_metadata import NOT_REQUIRED, REQUIRED
 
-from ..logic import Logic, RuleLogicError
+from ...logic import Logic, RuleLogicError
 
 
 class MetadataRulesTests(TestCase):

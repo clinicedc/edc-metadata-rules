@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from django.test import TestCase, tag
+from django.test import TestCase
 from edc_constants.constants import MALE, FEMALE
 from edc_facility.import_holidays import import_holidays
 from edc_metadata import NOT_REQUIRED, REQUIRED
@@ -12,14 +12,14 @@ from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
 
-from ..crf import CrfRuleGroup, CrfRule, CrfRuleModelConflict
-from ..predicate import P, PF, PredicateError
-from ..rule_evaluator import RuleEvaluatorRegisterSubjectError
-from ..rule_group_meta_options import RuleGroupMetaError
-from ..site import site_metadata_rules
-from .models import Appointment, SubjectVisit, SubjectConsent, CrfOne
-from .reference_configs import register_to_site_reference_configs
-from .visit_schedule import visit_schedule
+from ...crf import CrfRuleGroup, CrfRule, CrfRuleModelConflict
+from ...predicate import P, PF, PredicateError
+from ...rule_evaluator import RuleEvaluatorRegisterSubjectError
+from ...rule_group_meta_options import RuleGroupMetaError
+from ...site import site_metadata_rules
+from ..models import Appointment, SubjectVisit, SubjectConsent, CrfOne
+from ..reference_configs import register_to_site_reference_configs
+from ..visit_schedule import visit_schedule
 
 fake = Faker()
 
