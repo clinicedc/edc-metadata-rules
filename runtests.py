@@ -10,7 +10,7 @@ from edc_test_utils import DefaultTestSettings
 from os.path import abspath, dirname
 
 
-app_name = 'edc_metadata_rules'
+app_name = "edc_metadata_rules"
 base_dir = dirname(abspath(__file__))
 
 DEFAULT_SETTINGS = DefaultTestSettings(
@@ -27,6 +27,7 @@ DEFAULT_SETTINGS = DefaultTestSettings(
         "django.contrib.messages",
         "django.contrib.staticfiles",
         "django.contrib.sites",
+        "multisite",
         "django_crypto_fields.apps.AppConfig",
         "django_revision.apps.AppConfig",
         "edc_appointment.apps.AppConfig",
@@ -53,9 +54,10 @@ def main():
     if not settings.configured:
         settings.configure(**DEFAULT_SETTINGS)
     django.setup()
-    tags = [t.split('=')[1] for t in sys.argv if t.startswith('--tag')]
+    tags = [t.split("=")[1] for t in sys.argv if t.startswith("--tag")]
     failures = DiscoverRunner(failfast=False, tags=tags).run_tests(
-        [f'{app_name}.tests'])
+        [f"{app_name}.tests"]
+    )
     sys.exit(failures)
 
 
