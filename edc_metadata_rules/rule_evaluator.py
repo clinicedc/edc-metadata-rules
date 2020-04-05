@@ -1,7 +1,10 @@
+from warnings import warn
+
 from django.apps import apps as django_apps
 from django.core.exceptions import ObjectDoesNotExist
 from edc_metadata import DO_NOTHING
 
+from django.conf import settings
 from .predicate import NoValueError
 
 
@@ -20,6 +23,9 @@ class RuleEvaluator:
     Sets self.result to REQUIRED, NOT_REQUIRED or None.
 
     Set as a class attribute on Rule.
+
+    Ensure the model.field is registered with `site_reference_configs`.
+    See `edc_reference`.
     """
 
     def __init__(self, logic=None, visit=None, **kwargs):
@@ -32,7 +38,9 @@ class RuleEvaluator:
         )
         try:
             predicate = self.logic.predicate(**options)
-        except NoValueError:
+        except NoValueError as e:
+            if settings.DEBUG:
+                warn(str(e))
             pass
         else:
             if predicate:
