@@ -41,6 +41,9 @@ class Rule:
     def run(self, visit=None):
         """Returns a dictionary of {target_model: entry_status, ...} updated
         by running the rule for each target model given a visit.
+
+        Ensure the model.field is registered with `site_reference_configs`.
+        See `edc_reference`.
         """
         result = OrderedDict()
         opts = {k: v for k, v in self.__dict__.items() if k.startswith != "_"}
