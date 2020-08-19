@@ -191,7 +191,7 @@ class TestRequisitionRuleGroup(TestCase):
         rule_results, _ = MyRequisitionRuleGroup().evaluate_rules(visit=subject_visit)
         for panel in [self.panel_one, self.panel_two]:
             with self.subTest(panel=panel):
-                key = f"edc_metadata_rules.subjectrequisition"
+                key = "edc_metadata_rules.subjectrequisition"
                 for rule_result in rule_results["MyRequisitionRuleGroup.male"][key]:
                     self.assertEqual(rule_result.entry_status, REQUIRED)
                 for rule_result in rule_results["MyRequisitionRuleGroup.female"][key]:
@@ -202,7 +202,7 @@ class TestRequisitionRuleGroup(TestCase):
         rule_results, _ = MyRequisitionRuleGroup().evaluate_rules(visit=subject_visit)
         for panel in [self.panel_one, self.panel_two]:
             with self.subTest(panel=panel):
-                key = f"edc_metadata_rules.subjectrequisition"
+                key = "edc_metadata_rules.subjectrequisition"
                 for rule_result in rule_results["MyRequisitionRuleGroup.female"].get(
                     key
                 ):
@@ -260,7 +260,7 @@ class TestRequisitionRuleGroup(TestCase):
         rule_results, _ = RequisitionRuleGroup2().evaluate_rules(visit=subject_visit)
         for panel_name in ["one", "two"]:
             with self.subTest(panel_name=panel_name):
-                key = f"edc_metadata_rules.subjectrequisition"
+                key = "edc_metadata_rules.subjectrequisition"
                 for rule_result in rule_results["RequisitionRuleGroup2.male"][key]:
                     self.assertEqual(rule_result.entry_status, REQUIRED)
                 for rule_result in rule_results["RequisitionRuleGroup2.female"][key]:

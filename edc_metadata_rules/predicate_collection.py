@@ -24,6 +24,8 @@ class PredicateCollection:
     visit_model = None
 
     def __init__(self):
+        if not site_reference_configs.loaded:
+            site_reference_configs.autodiscover()
         self.reference_model_cls = django_apps.get_model(
             site_reference_configs.get_reference_model(self.visit_model)
         )
