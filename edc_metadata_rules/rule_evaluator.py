@@ -1,10 +1,9 @@
-from warnings import warn
-
 from django.apps import apps as django_apps
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from edc_metadata import DO_NOTHING
+from warnings import warn
 
-from django.conf import settings
 from .predicate import NoValueError
 
 

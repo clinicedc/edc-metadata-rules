@@ -108,7 +108,6 @@ class TestPredicates(TestCase):
         )
         self.assertRaises(NoValueError, P("f1", "eq", "car"), **opts)
 
-    @tag("1")
     def test_p_with_field_on_source_keyed_value_none(self):
         visit = self.enroll(gender=FEMALE)
         opts = dict(
