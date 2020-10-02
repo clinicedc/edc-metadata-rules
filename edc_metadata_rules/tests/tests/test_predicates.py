@@ -141,6 +141,28 @@ class TestPredicates(TestCase):
         CrfOne.objects.create(subject_visit=visit, f1="car")
         self.assertTrue(P("f1", "eq", "car")(**opts))
 
+    def test_p_with_field_on_source_keyed_with_multiple_values_in(self):
+        visit = self.enroll(gender=FEMALE)
+        opts = dict(
+            source_model="edc_metadata_rules.crfone",
+            registered_subject=self.registered_subject,
+            visit=visit,
+            reference_getter_cls=ReferenceGetter,
+        )
+        CrfOne.objects.create(subject_visit=visit, f1="car")
+        self.assertTrue(P("f1", "in", ["car", "bicycle"])(**opts))
+
+    def test_p_with_field_on_source_keyed_with_multiple_values_not_in(self):
+        visit = self.enroll(gender=FEMALE)
+        opts = dict(
+            source_model="edc_metadata_rules.crfone",
+            registered_subject=self.registered_subject,
+            visit=visit,
+            reference_getter_cls=ReferenceGetter,
+        )
+        CrfOne.objects.create(subject_visit=visit, f1="truck")
+        self.assertFalse(P("f1", "in", ["car", "bicycle"])(**opts))
+
     def test_pf(self):
         visit = self.enroll(gender=FEMALE)
         opts = dict(

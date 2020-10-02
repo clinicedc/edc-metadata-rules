@@ -86,6 +86,7 @@ class P(BasePredicate):
         "==": lambda x, y: True if x == y else False,
         "neq": lambda x, y: True if x != y else False,
         "!=": lambda x, y: True if x != y else False,
+        "in": lambda x, y: True if x in y else False,
     }
 
     def __init__(self, attr, operator, expected_value):
