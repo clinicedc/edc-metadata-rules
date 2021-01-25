@@ -39,7 +39,7 @@ class RuleEvaluator:
             predicate = self.logic.predicate(**options)
         except NoValueError as e:
             if settings.DEBUG:
-                warn(str(e))
+                warn(f"{str(e)} To ignore set settings.DEBUG=False.")
             pass
         else:
             if predicate:
