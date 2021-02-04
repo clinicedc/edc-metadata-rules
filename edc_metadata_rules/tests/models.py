@@ -1,4 +1,5 @@
 from datetime import date
+
 from django.db import models
 from django.db.models.deletion import PROTECT
 from edc_appointment.models import Appointment
@@ -8,8 +9,10 @@ from edc_identifier.managers import SubjectIdentifierManager
 from edc_identifier.model_mixins import UniqueSubjectIdentifierFieldMixin
 from edc_lab.model_mixins import PanelModelMixin
 from edc_metadata.model_mixins.creates import CreatesMetadataModelMixin
-from edc_metadata.model_mixins.updates import UpdatesCrfMetadataModelMixin
-from edc_metadata.model_mixins.updates import UpdatesRequisitionMetadataModelMixin
+from edc_metadata.model_mixins.updates import (
+    UpdatesCrfMetadataModelMixin,
+    UpdatesRequisitionMetadataModelMixin,
+)
 from edc_model.models import BaseUuidModel
 from edc_offstudy.model_mixins import OffstudyModelMixin
 from edc_reference.model_mixins import (
@@ -17,13 +20,10 @@ from edc_reference.model_mixins import (
     RequisitionReferenceModelMixin,
 )
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
-from edc_utils import get_utcnow
-from edc_visit_schedule.model_mixins import OnScheduleModelMixin, OffScheduleModelMixin
-from edc_visit_tracking.model_mixins import (
-    VisitModelMixin,
-    VisitTrackingCrfModelMixin,
-)
 from edc_sites.models import SiteModelMixin
+from edc_utils import get_utcnow
+from edc_visit_schedule.model_mixins import OffScheduleModelMixin, OnScheduleModelMixin
+from edc_visit_tracking.model_mixins import VisitModelMixin, VisitTrackingCrfModelMixin
 
 
 class OnSchedule(OnScheduleModelMixin, BaseUuidModel):

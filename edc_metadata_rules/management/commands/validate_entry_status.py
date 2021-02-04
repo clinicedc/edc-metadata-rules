@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
 from django.db.models import Count
 from edc_metadata.constants import KEYED
-from edc_metadata.models import RequisitionMetadata, CrfMetadata
+from edc_metadata.models import CrfMetadata, RequisitionMetadata
 from tqdm import tqdm
 
 
@@ -23,9 +23,7 @@ class Command(BaseCommand):
         )
         requisition_models = [grp.get("model") for grp in grouping]
         grouping = (
-            CrfMetadata.objects.values("model")
-            .annotate(model_count=Count("model"))
-            .order_by()
+            CrfMetadata.objects.values("model").annotate(model_count=Count("model")).order_by()
         )
         crf_models = [grp.get("model") for grp in grouping]
 

@@ -1,6 +1,6 @@
 from django.test import TestCase, tag  # noqa
 from edc_appointment.models import Appointment
-from edc_constants.constants import MALE, FEMALE
+from edc_constants.constants import FEMALE, MALE
 from edc_facility.import_holidays import import_holidays
 from edc_reference.reference.reference_getter import ReferenceGetter
 from edc_reference.site_reference import site_reference_configs
@@ -10,8 +10,8 @@ from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
 
-from ...predicate import PF, P, NoValueError
-from ..models import SubjectVisit, SubjectConsent, CrfOne
+from ...predicate import PF, NoValueError, P
+from ..models import CrfOne, SubjectConsent, SubjectVisit
 from ..reference_configs import register_to_site_reference_configs
 from ..visit_schedule import visit_schedule
 
@@ -31,9 +31,7 @@ class TestPredicates(TestCase):
         site_visit_schedules.register(visit_schedule)
         register_to_site_reference_configs()
         site_reference_configs.register_from_visit_schedule(
-            visit_models={
-                "edc_appointment.appointment": "edc_metadata_rules.subjectvisit"
-            }
+            visit_models={"edc_appointment.appointment": "edc_metadata_rules.subjectvisit"}
         )
         _, self.schedule = site_visit_schedules.get_by_onschedule_model(
             "edc_metadata_rules.onschedule"
@@ -97,8 +95,7 @@ class TestPredicates(TestCase):
         self.assertTrue(P("reason", "eq", SCHEDULED)(**opts))
 
     def test_p_with_field_on_source_not_keyed(self):
-        """Assert raises NoValueError if CrfOne has not been keyed.
-        """
+        """Assert raises NoValueError if CrfOne has not been keyed."""
         visit = self.enroll(gender=FEMALE)
         opts = dict(
             source_model="edc_metadata_rules.crfone",

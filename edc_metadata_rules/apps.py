@@ -6,7 +6,6 @@ from django.core.management.color import color_style
 
 from .site import site_metadata_rules
 
-
 style = color_style()
 
 
@@ -19,9 +18,7 @@ class AppConfig(DjangoAppConfig):
         site_metadata_rules.autodiscover()
         if not site_metadata_rules.registry:
             sys.stdout.write(
-                style.ERROR(
-                    " Warning. No metadata rules were loaded by autodiscover.\n"
-                )
+                style.ERROR(" Warning. No metadata rules were loaded by autodiscover.\n")
             )
         if not self.metadata_rules_enabled:
             sys.stdout.write(style.NOTICE(" * metadata rules disabled!\n"))
@@ -29,7 +26,7 @@ class AppConfig(DjangoAppConfig):
 
 
 if settings.APP_NAME == "edc_metadata_rules":
-    from dateutil.relativedelta import SU, MO, TU, WE, TH, FR, SA
+    from dateutil.relativedelta import FR, MO, SA, SU, TH, TU, WE
     from edc_facility.apps import AppConfig as BaseEdcFacilityAppConfig
     from edc_metadata.apps import AppConfig as BaseEdcMetadataAppConfig
     from edc_visit_tracking.apps import AppConfig as BaseEdcVisitTrackingAppConfig
@@ -44,7 +41,5 @@ if settings.APP_NAME == "edc_metadata_rules":
 
     class EdcFacilityAppConfig(BaseEdcFacilityAppConfig):
         definitions = {
-            "default": dict(
-                days=[MO, TU, WE, TH, FR, SA, SU], slots=[100, 100, 100, 100, 100]
-            )
+            "default": dict(days=[MO, TU, WE, TH, FR, SA, SU], slots=[100, 100, 100, 100, 100])
         }

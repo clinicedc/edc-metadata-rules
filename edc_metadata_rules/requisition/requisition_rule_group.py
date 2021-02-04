@@ -1,4 +1,5 @@
 from collections import OrderedDict, namedtuple
+
 from django.core.exceptions import ValidationError
 from edc_metadata import RequisitionMetadataUpdater
 
@@ -68,9 +69,7 @@ class RequisitionRuleGroup(RuleGroup, metaclass=RequisitionMetaclass):
         Requisitions depending on visit_code_sequence.
         """
         if visit.visit_code_sequence != 0:
-            requisitions = (
-                visit.visit.requisitions_unscheduled + visit.visit.requisitions_prn
-            )
+            requisitions = visit.visit.requisitions_unscheduled + visit.visit.requisitions_prn
         else:
             requisitions = visit.visit.requisitions + visit.visit.requisitions_prn
         return requisitions
@@ -99,9 +98,7 @@ class RequisitionRuleGroup(RuleGroup, metaclass=RequisitionMetaclass):
                             target_model=target_model,
                             target_panel=target_panel,
                         )
-                        metadata_obj = metadata_updater.update(
-                            entry_status=entry_status
-                        )
+                        metadata_obj = metadata_updater.update(entry_status=entry_status)
                         metadata_objects.update({target_panel: metadata_obj})
                         rule_results[str(rule)][target_model].append(
                             RuleResult(target_panel, entry_status)

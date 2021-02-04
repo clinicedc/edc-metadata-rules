@@ -8,8 +8,7 @@ class RegisterRuleGroupError(Exception):
 
 
 def register(site=None, **kwargs):
-    """Registers a rule group.
-    """
+    """Registers a rule group."""
     site = site or site_metadata_rules
 
     def _rule_group_wrapper(rule_group_cls):
