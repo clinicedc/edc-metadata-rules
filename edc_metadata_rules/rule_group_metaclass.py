@@ -10,12 +10,11 @@ class RuleGroupError(Exception):
 
 
 class RuleGroupMetaclass(type):
-    """Rule group metaclass.
-    """
+    """Rule group metaclass."""
 
     rule_group_meta = RuleGroupMetaOptions
 
-    def __new__(cls, name, bases, attrs):
+    def __new__(mcs, name, bases, attrs):
         try:
             abstract = attrs.get("Meta", False).abstract
         except AttributeError:
@@ -23,7 +22,7 @@ class RuleGroupMetaclass(type):
         parents = [b for b in bases if isinstance(b, RuleGroupMetaclass)]
         if not parents or abstract:
             # If this isn't a subclass, don't do anything special.
-            return super().__new__(cls, name, bases, attrs)
+            return super().__new__(mcs, name, bases, attrs)
 
         # get rules from abstract parents
         for parent in parents:
@@ -40,18 +39,18 @@ class RuleGroupMetaclass(type):
                 pass
 
         # prepare "meta" options from class Meta:
-        meta = cls.rule_group_meta(name, attrs)
+        meta = mcs.rule_group_meta(name, attrs)
         # add the rules tuple to the meta options
-        rules = cls.__get_rules(name, attrs, meta)
+        rules = mcs.__get_rules(name, attrs, meta)
         meta.options.update(rules=rules)
         # ... django style _meta
         attrs.update({"_meta": meta})
 
         attrs.update({"name": f"{meta.app_label}.{name.lower()}"})
-        return super().__new__(cls, name, bases, attrs)
+        return super().__new__(mcs, name, bases, attrs)
 
     @classmethod
-    def __get_rules(cls, name, attrs, meta):
+    def __get_rules(mcs, name, attrs, meta):
         """Returns a list of rules after updating each rule's attrs
         with values from Meta.
 
@@ -66,12 +65,12 @@ class RuleGroupMetaclass(type):
                     rule.group = name
                     for k, v in meta.options.items():
                         setattr(rule, k, v)
-                    rule.target_models = cls.__get_target_models(rule, meta)
+                    rule.target_models = mcs.__get_target_models(rule, meta)
                     rules.append(rule)
         return tuple(rules)
 
     @classmethod
-    def __get_target_models(cls, rule, meta):
+    def __get_target_models(mcs, rule, meta):
         """Returns target models as a list of label_lowers.
 
         Target models are the models whose metadata is acted upon.
