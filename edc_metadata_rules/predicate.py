@@ -10,9 +10,7 @@ class NoValueError(Exception):
 
 
 class BasePredicate:
-    def get_value(
-        self, attr=None, source_model=None, reference_getter_cls=None, **kwargs
-    ):
+    def get_value(self, attr=None, source_model=None, reference_getter_cls=None, **kwargs):
         """Returns a value by checking for the attr on each arg.
 
         Each arg in args may be a model instance, queryset, or None.
@@ -47,9 +45,7 @@ class BasePredicate:
             try:
                 reference = reference_getter_cls(**opts)
             except ReferenceObjectDoesNotExist as e:
-                raise NoValueError(
-                    f"No value found for {attr}. Given {kwargs}. Got {e}."
-                )
+                raise NoValueError(f"No value found for {attr}. Given {kwargs}. Got {e}.")
             else:
                 if reference.has_value:
                     value = getattr(reference, attr)
@@ -110,23 +106,23 @@ class P(BasePredicate):
 
 class PF(BasePredicate):
     """
-        Predicate with a lambda function.
+    Predicate with a lambda function.
 
-        predicate = PF('age', lambda x: True if x >= 18 and x <= 64 else False)
+    predicate = PF('age', lambda x: True if x >= 18 and x <= 64 else False)
 
-        if lamda is anything more complicated just pass a func directly to the predicate attr:
+    if lamda is anything more complicated just pass a func directly to the predicate attr:
 
-            def my_func(visit, registered_subject, source_obj, source_qs):
-                if source_obj.married and registered_subject.gender == FEMALE:
-                    return True
-                return False
+        def my_func(visit, registered_subject, source_obj, source_qs):
+            if source_obj.married and registered_subject.gender == FEMALE:
+                return True
+            return False
 
-            class MyRuleGroup(RuleGroup):
+        class MyRuleGroup(RuleGroup):
 
-                my_rule = Rule(
-                    ...
-                    predicate = my_func
-                    ...
+            my_rule = Rule(
+                ...
+                predicate = my_func
+                ...
 
     """
 

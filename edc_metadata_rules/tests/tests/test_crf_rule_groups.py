@@ -1,9 +1,10 @@
 from collections import OrderedDict
+
 from django.apps import apps as django_apps
 from django.test import TestCase, tag  # noqa
 from edc_constants.constants import MALE
 from edc_facility.import_holidays import import_holidays
-from edc_metadata import NOT_REQUIRED, REQUIRED, KEYED
+from edc_metadata import KEYED, NOT_REQUIRED, REQUIRED
 from edc_metadata.models import CrfMetadata
 from edc_reference.site_reference import site_reference_configs
 from edc_utils import get_utcnow
@@ -11,12 +12,11 @@ from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
 
-from ...crf import CrfRuleGroup, CrfRule
+from ...crf import CrfRule, CrfRuleGroup
 from ...predicate import P
 from ...site import site_metadata_rules
+from ..models import Appointment, CrfOne, CrfTwo, SubjectConsent, SubjectVisit
 from ..reference_configs import register_to_site_reference_configs
-from ..models import Appointment, SubjectVisit
-from ..models import CrfOne, CrfTwo, SubjectConsent
 from ..visit_schedule import visit_schedule
 
 fake = Faker()
@@ -75,9 +75,7 @@ class CrfRuleGroupTwo(CrfRuleGroup):
         site_visit_schedules.loaded = False
         site_visit_schedules.register(visit_schedule)
         site_reference_configs.register_from_visit_schedule(
-            visit_models={
-                "edc_appointment.appointment": "edc_metadata_rules.subjectvisit"
-            }
+            visit_models={"edc_appointment.appointment": "edc_metadata_rules.subjectvisit"}
         )
 
         # note crfs in visit schedule are all set to REQUIRED by default.
@@ -112,8 +110,7 @@ class CrfRuleGroupTwo(CrfRuleGroup):
         return subject_visit
 
     def test_example1(self):
-        """Asserts CrfTwo is REQUIRED if f1==\'car\' as specified.
-        """
+        """Asserts CrfTwo is REQUIRED if f1==\'car\' as specified."""
         subject_visit = self.enroll(gender=MALE)
         self.assertEqual(
             CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
@@ -136,8 +133,7 @@ class CrfRuleGroupTwo(CrfRuleGroup):
         )
 
     def test_example2(self):
-        """Asserts CrfThree is REQUIRED if f1==\'bicycle\' as specified.
-        """
+        """Asserts CrfThree is REQUIRED if f1==\'bicycle\' as specified."""
 
         subject_visit = self.enroll(gender=MALE)
         self.assertEqual(
@@ -222,8 +218,7 @@ class CrfRuleGroupTwo(CrfRuleGroup):
         )
 
     def test_keyed_instance_ignores_rules(self):
-        """Asserts if instance exists, rule is ignored.
-        """
+        """Asserts if instance exists, rule is ignored."""
         subject_visit = self.enroll(gender=MALE)
         self.assertEqual(
             CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
@@ -265,8 +260,7 @@ class CrfRuleGroupTwo(CrfRuleGroup):
         self.assertEqual(metadata_obj.entry_status, KEYED)
 
     def test_delete(self):
-        """Asserts delete returns to default entry status.
-        """
+        """Asserts delete returns to default entry status."""
         subject_visit = self.enroll(gender=MALE)
         self.assertEqual(
             CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,
@@ -288,8 +282,7 @@ class CrfRuleGroupTwo(CrfRuleGroup):
         )
 
     def test_delete_2(self):
-        """Asserts delete returns to entry status of rule for crf_two.
-        """
+        """Asserts delete returns to entry status of rule for crf_two."""
         subject_visit = self.enroll(gender=MALE)
         self.assertEqual(
             CrfMetadata.objects.get(model="edc_metadata_rules.crftwo").entry_status,

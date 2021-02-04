@@ -1,4 +1,5 @@
 from collections import OrderedDict
+
 from edc_metadata import MetadataUpdater
 from edc_metadata.target_handler import TargetModelConflict
 
@@ -7,8 +8,7 @@ from ..rule_group_metaclass import RuleGroupMetaclass
 
 
 class CrfRuleGroup(RuleGroup, metaclass=RuleGroupMetaclass):
-    """A class used to declare and contain rules.
-    """
+    """A class used to declare and contain rules."""
 
     metadata_updater_cls = MetadataUpdater
 

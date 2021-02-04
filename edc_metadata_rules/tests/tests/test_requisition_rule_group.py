@@ -1,9 +1,10 @@
 from collections import OrderedDict
+
 from django.test import TestCase, tag
-from edc_constants.constants import MALE, FEMALE
+from edc_constants.constants import FEMALE, MALE
 from edc_facility.import_holidays import import_holidays
 from edc_lab.models import Panel
-from edc_metadata import NOT_REQUIRED, REQUIRED, KEYED
+from edc_metadata import KEYED, NOT_REQUIRED, REQUIRED
 from edc_metadata.models import RequisitionMetadata
 from edc_reference import site_reference_configs
 from edc_reference.models import Reference
@@ -13,11 +14,19 @@ from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
 
 from ...predicate import P
-from ...requisition import RequisitionRuleGroupMetaOptionsError
-from ...requisition import RequisitionRuleGroup, RequisitionRule
+from ...requisition import (
+    RequisitionRule,
+    RequisitionRuleGroup,
+    RequisitionRuleGroupMetaOptionsError,
+)
 from ...site import site_metadata_rules
-from ..models import Appointment, SubjectVisit, SubjectConsent, SubjectRequisition
-from ..models import CrfOne
+from ..models import (
+    Appointment,
+    CrfOne,
+    SubjectConsent,
+    SubjectRequisition,
+    SubjectVisit,
+)
 from ..reference_configs import register_to_site_reference_configs
 from ..visit_schedule import visit_schedule
 
@@ -40,8 +49,7 @@ panel_eight = RequisitionPanel("eight")
 
 
 class BadPanelsRequisitionRuleGroup(RequisitionRuleGroup):
-    """Specifies invalid panel names.
-    """
+    """Specifies invalid panel names."""
 
     rule = RequisitionRule(
         predicate=P("gender", "eq", MALE),
@@ -86,8 +94,7 @@ class RequisitionRuleGroup2(RequisitionRuleGroup):
 
 
 class RequisitionRuleGroup3(RequisitionRuleGroup):
-    """A rule group where source model is a requisition.
-    """
+    """A rule group where source model is a requisition."""
 
     female = RequisitionRule(
         predicate=P("f1", "eq", "hello"),
@@ -123,8 +130,7 @@ class BaseRequisitionRuleGroup(RequisitionRuleGroup):
 
 
 class MyRequisitionRuleGroup(BaseRequisitionRuleGroup):
-    """A rule group where source model is NOT a requisition.
-    """
+    """A rule group where source model is NOT a requisition."""
 
     class Meta:
         app_label = "edc_metadata_rules"
@@ -152,9 +158,7 @@ class TestRequisitionRuleGroup(TestCase):
         site_visit_schedules.loaded = False
         site_visit_schedules.register(visit_schedule)
         site_reference_configs.register_from_visit_schedule(
-            visit_models={
-                "edc_appointment.appointment": "edc_metadata_rules.subjectvisit"
-            }
+            visit_models={"edc_appointment.appointment": "edc_metadata_rules.subjectvisit"}
         )
         _, self.schedule = site_visit_schedules.get_by_onschedule_model(
             "edc_metadata_rules.onschedule"
@@ -203,9 +207,7 @@ class TestRequisitionRuleGroup(TestCase):
         for panel in [self.panel_one, self.panel_two]:
             with self.subTest(panel=panel):
                 key = "edc_metadata_rules.subjectrequisition"
-                for rule_result in rule_results["MyRequisitionRuleGroup.female"].get(
-                    key
-                ):
+                for rule_result in rule_results["MyRequisitionRuleGroup.female"].get(key):
                     self.assertEqual(rule_result.entry_status, REQUIRED)
                 for rule_result in rule_results["MyRequisitionRuleGroup.male"].get(key):
                     self.assertEqual(rule_result.entry_status, NOT_REQUIRED)
@@ -267,14 +269,11 @@ class TestRequisitionRuleGroup(TestCase):
                     self.assertEqual(rule_result.entry_status, NOT_REQUIRED)
 
     def test_metadata_for_rule_male_with_source_model_as_requisition1(self):
-        """RequisitionRuleGroup2
-        """
+        """RequisitionRuleGroup2"""
         site_metadata_rules.registry = OrderedDict()
         site_metadata_rules.register(RequisitionRuleGroup2)
         subject_visit = self.enroll(gender=MALE)
-        SubjectRequisition.objects.create(
-            subject_visit=subject_visit, panel=self.panel_five
-        )
+        SubjectRequisition.objects.create(subject_visit=subject_visit, panel=self.panel_five)
         for panel_name in ["one", "two"]:
             with self.subTest(panel_name=panel_name):
                 obj = RequisitionMetadata.objects.get(
@@ -289,9 +288,7 @@ class TestRequisitionRuleGroup(TestCase):
         subject_visit = self.enroll(gender=MALE)
         site_metadata_rules.registry = OrderedDict()
         site_metadata_rules.register(RequisitionRuleGroup2)
-        SubjectRequisition.objects.create(
-            subject_visit=subject_visit, panel=self.panel_five
-        )
+        SubjectRequisition.objects.create(subject_visit=subject_visit, panel=self.panel_five)
         for panel_name in ["three", "four"]:
             with self.subTest(panel_name=panel_name):
                 obj = RequisitionMetadata.objects.get(
@@ -316,9 +313,7 @@ class TestRequisitionRuleGroup(TestCase):
             field_name="panel",
             value_uuid=self.panel_five.id,
         )
-        SubjectRequisition.objects.create(
-            subject_visit=subject_visit, panel=self.panel_five
-        )
+        SubjectRequisition.objects.create(subject_visit=subject_visit, panel=self.panel_five)
         for panel in [self.panel_three, self.panel_four]:
             with self.subTest(panel=panel):
                 obj = RequisitionMetadata.objects.get(
@@ -333,9 +328,7 @@ class TestRequisitionRuleGroup(TestCase):
         subject_visit = self.enroll(gender=FEMALE)
         site_metadata_rules.registry = OrderedDict()
         site_metadata_rules.register(RequisitionRuleGroup2)
-        SubjectRequisition.objects.create(
-            subject_visit=subject_visit, panel=self.panel_five
-        )
+        SubjectRequisition.objects.create(subject_visit=subject_visit, panel=self.panel_five)
         for panel in [self.panel_one, self.panel_two]:
             with self.subTest(panel=panel):
                 obj = RequisitionMetadata.objects.get(
@@ -368,8 +361,7 @@ class TestRequisitionRuleGroup(TestCase):
                 self.assertEqual(obj.entry_status, NOT_REQUIRED)
 
     def test_keyed_instance_ignores_rules(self):
-        """Asserts if instance exists, rule is ignored.
-        """
+        """Asserts if instance exists, rule is ignored."""
         subject_visit = self.enroll(gender=FEMALE)
         site_metadata_rules.registry = OrderedDict()
         site_metadata_rules.register(RequisitionRuleGroup3)
@@ -426,9 +418,7 @@ class TestRequisitionRuleGroup(TestCase):
         self.assertEqual(metadata_obj.entry_status, REQUIRED)
 
         # KEY requisition
-        SubjectRequisition.objects.create(
-            subject_visit=subject_visit, panel=self.panel_six
-        )
+        SubjectRequisition.objects.create(subject_visit=subject_visit, panel=self.panel_six)
         metadata_obj = RequisitionMetadata.objects.get(
             model="edc_metadata_rules.subjectrequisition",
             subject_identifier=subject_visit.subject_identifier,
@@ -451,8 +441,7 @@ class TestRequisitionRuleGroup(TestCase):
         self.assertEqual(metadata_obj.entry_status, KEYED)
 
     def test_recovers_from_sequence_problem(self):
-        """Asserts if instance exists, rule is ignored.
-        """
+        """Asserts if instance exists, rule is ignored."""
         subject_visit = self.enroll(gender=FEMALE)
         site_metadata_rules.registry = OrderedDict()
         site_metadata_rules.register(RequisitionRuleGroup3)
@@ -478,9 +467,7 @@ class TestRequisitionRuleGroup(TestCase):
         self.assertEqual(metadata_obj.entry_status, REQUIRED)
 
         # KEY requisition
-        SubjectRequisition.objects.create(
-            subject_visit=subject_visit, panel=self.panel_six
-        )
+        SubjectRequisition.objects.create(subject_visit=subject_visit, panel=self.panel_six)
         metadata_obj = RequisitionMetadata.objects.get(
             model="edc_metadata_rules.subjectrequisition",
             subject_identifier=subject_visit.subject_identifier,
@@ -531,9 +518,7 @@ class TestRequisitionRuleGroup(TestCase):
         self.assertEqual(metadata_obj.entry_status, REQUIRED)
 
         # KEY requisition
-        SubjectRequisition.objects.create(
-            subject_visit=subject_visit, panel=self.panel_six
-        )
+        SubjectRequisition.objects.create(subject_visit=subject_visit, panel=self.panel_six)
         metadata_obj = RequisitionMetadata.objects.get(
             model="edc_metadata_rules.subjectrequisition",
             subject_identifier=subject_visit.subject_identifier,

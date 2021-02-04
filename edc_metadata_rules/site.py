@@ -1,7 +1,7 @@
 import copy
 import sys
-
 from collections import OrderedDict
+
 from django.apps import apps as django_apps
 from django.utils.module_loading import import_module, module_has_submodule
 
@@ -16,14 +16,13 @@ class SiteMetadataNoRulesError(Exception):
 
 class SiteMetadataRules:
 
-    """ Main controller of :class:`MetadataRules` objects.
-    """
+    """Main controller of :class:`MetadataRules` objects."""
 
     def __init__(self):
         self.registry = OrderedDict()
 
     def register(self, rule_group_cls=None):
-        """ Register MetadataRules to a list per app_label
+        """Register MetadataRules to a list per app_label
         for the module the rule groups were declared in.
         """
         if rule_group_cls:

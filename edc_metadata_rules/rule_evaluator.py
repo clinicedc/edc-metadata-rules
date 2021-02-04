@@ -1,8 +1,9 @@
+from warnings import warn
+
 from django.apps import apps as django_apps
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from edc_metadata import DO_NOTHING
-from warnings import warn
 
 from .predicate import NoValueError
 
@@ -32,9 +33,7 @@ class RuleEvaluator:
         self.logic = logic
         self.result = None
         self.visit = visit
-        options = dict(
-            visit=self.visit, registered_subject=self.registered_subject, **kwargs
-        )
+        options = dict(visit=self.visit, registered_subject=self.registered_subject, **kwargs)
         try:
             predicate = self.logic.predicate(**options)
         except NoValueError as e:
@@ -56,8 +55,7 @@ class RuleEvaluator:
 
     @property
     def registered_subject(self):
-        """Returns a registered subject model instance or raises.
-        """
+        """Returns a registered subject model instance or raises."""
         if not self._registered_subject:
             try:
                 self._registered_subject = self.registered_subject_model.objects.get(

@@ -1,6 +1,7 @@
 from collections import OrderedDict
+
 from django.test import TestCase
-from edc_constants.constants import MALE, FEMALE
+from edc_constants.constants import FEMALE, MALE
 from edc_facility.import_holidays import import_holidays
 from edc_metadata import NOT_REQUIRED, REQUIRED
 from edc_metadata.models import CrfMetadata
@@ -12,12 +13,12 @@ from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
 
-from ...crf import CrfRuleGroup, CrfRule, CrfRuleModelConflict
-from ...predicate import P, PF, PredicateError
+from ...crf import CrfRule, CrfRuleGroup, CrfRuleModelConflict
+from ...predicate import PF, P, PredicateError
 from ...rule_evaluator import RuleEvaluatorRegisterSubjectError
 from ...rule_group_meta_options import RuleGroupMetaError
 from ...site import site_metadata_rules
-from ..models import Appointment, SubjectVisit, SubjectConsent, CrfOne
+from ..models import Appointment, CrfOne, SubjectConsent, SubjectVisit
 from ..reference_configs import register_to_site_reference_configs
 from ..visit_schedule import visit_schedule
 
@@ -25,8 +26,7 @@ fake = Faker()
 
 
 class CrfRuleGroupWithSourceModel(CrfRuleGroup):
-    """Specifies source model.
-    """
+    """Specifies source model."""
 
     crfs_male = CrfRule(
         predicate=P("f1", "eq", "car"),
@@ -121,9 +121,7 @@ class TestMetadataRulesWithGender(TestCase):
         site_visit_schedules.register(visit_schedule)
 
         site_reference_configs.register_from_visit_schedule(
-            visit_models={
-                "edc_appointment.appointment": "edc_metadata_rules.subjectvisit"
-            }
+            visit_models={"edc_appointment.appointment": "edc_metadata_rules.subjectvisit"}
         )
 
         # note crfs in visit schedule are all set to REQUIRED by default.
@@ -188,9 +186,7 @@ class TestMetadataRulesWithGender(TestCase):
 
     def test_rules_with_source_but_no_explicit_reference_model(self):
         subject_visit = self.enroll(MALE)
-        for rule in CrfRuleGroupWithoutExplicitReferenceModel._meta.options.get(
-            "rules"
-        ):
+        for rule in CrfRuleGroupWithoutExplicitReferenceModel._meta.options.get("rules"):
             with self.subTest(rule=rule):
                 self.assertIsNotNone(rule.source_model)
                 result = rule.run(subject_visit)
@@ -283,9 +279,7 @@ class TestMetadataRulesWithGender(TestCase):
         subject_visit = self.enroll(MALE)
         RegisteredSubject.objects.all().delete()
         for rule in CrfRuleGroupWithSourceModel._meta.options.get("rules"):
-            self.assertRaises(
-                RuleEvaluatorRegisterSubjectError, rule.run, subject_visit
-            )
+            self.assertRaises(RuleEvaluatorRegisterSubjectError, rule.run, subject_visit)
 
     def test_metadata_rules_run_male_required(self):
         subject_visit = self.enroll(gender=MALE)
@@ -364,27 +358,19 @@ class TestMetadataRulesWithGender(TestCase):
         subject_visit = self.enroll(gender=MALE)
         rule_results, _ = CrfRuleGroupGender().evaluate_rules(visit=subject_visit)
         self.assertEqual(
-            rule_results["CrfRuleGroupGender.crfs_male"].get(
-                "edc_metadata_rules.crffour"
-            ),
+            rule_results["CrfRuleGroupGender.crfs_male"].get("edc_metadata_rules.crffour"),
             REQUIRED,
         )
         self.assertEqual(
-            rule_results["CrfRuleGroupGender.crfs_male"].get(
-                "edc_metadata_rules.crffive"
-            ),
+            rule_results["CrfRuleGroupGender.crfs_male"].get("edc_metadata_rules.crffive"),
             REQUIRED,
         )
         self.assertEqual(
-            rule_results["CrfRuleGroupGender.crfs_female"].get(
-                "edc_metadata_rules.crftwo"
-            ),
+            rule_results["CrfRuleGroupGender.crfs_female"].get("edc_metadata_rules.crftwo"),
             NOT_REQUIRED,
         )
         self.assertEqual(
-            rule_results["CrfRuleGroupGender.crfs_female"].get(
-                "edc_metadata_rules.crfthree"
-            ),
+            rule_results["CrfRuleGroupGender.crfs_female"].get("edc_metadata_rules.crfthree"),
             NOT_REQUIRED,
         )
 
@@ -451,8 +437,7 @@ class TestMetadataRulesWithGender(TestCase):
             self.fail("PredicateError not raised.")
 
     def test_predicate_pf(self):
-        """Asserts entry status unchanged if source model does not exist.
-        """
+        """Asserts entry status unchanged if source model does not exist."""
 
         def func(f1, f2):
             return True if f1 == "f1" and f2 == "f2" else False
